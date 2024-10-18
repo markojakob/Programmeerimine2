@@ -9,5 +9,9 @@ namespace KooliProjekt.Data
             : base(options)
         {
         }
+
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Renting> Rentings { get; set; }
+        public DbSet<Car> Cars { get; set; }
     }
 }
