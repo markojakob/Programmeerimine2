@@ -12,12 +12,13 @@ namespace KooliProjekt.Data
         public string CarMaker { get; set; }
 
         [Required]
-        [StringLength(15)]
+        [StringLength(30)]
         public decimal Price { get; set; }
         public string Colour { get; set; }
         public string Description { get; set; }
 
         [Required]
+        [StringLength(20)]
         public decimal KmTariff { get; set; }
         [Required]
         public string Category { get; set; }
