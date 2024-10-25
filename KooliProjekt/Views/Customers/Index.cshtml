@@ -1,5 +1,5 @@
-﻿@model IEnumerable<KooliProjekt.Data.Customer>
-
+﻿@model PagedResult<KooliProjekt.Data.Customer>
+    
 @{
     ViewData["Title"] = "Index";
 }
@@ -13,22 +13,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                FirstName
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                LastName
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhoneNum)
+                PhoneNum
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                Aadress
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Results) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)

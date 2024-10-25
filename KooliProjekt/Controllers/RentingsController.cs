@@ -19,10 +19,10 @@ namespace KooliProjekt.Controllers
         }
 
         // GET: Rentings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var applicationDbContext = _context.Rentings.Include(r => r.Customer);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.GetPagedAsync(1, 5));
         }
 
         // GET: Rentings/Details/5
@@ -47,7 +47,7 @@ namespace KooliProjekt.Controllers
         // GET: Rentings/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address");
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace KooliProjekt.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", renting.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
@@ -81,7 +81,7 @@ namespace KooliProjekt.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", renting.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
@@ -117,7 +117,7 @@ namespace KooliProjekt.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", renting.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KooliProjekt.Data
 {
@@ -13,5 +14,11 @@ namespace KooliProjekt.Data
         public int PhoneNum {  get; set; }
         [Required]
         public string Address { get; set; }
+
+        [NotMapped]
+        public string FullName 
+        { 
+            get { return FirstName + " " + LastName; }
+        }
     }
 }
