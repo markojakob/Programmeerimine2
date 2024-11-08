@@ -7,8 +7,7 @@ namespace KooliProjekt.Data
         public int Id { get; set; }
         
         [Required]
-        [StringLength(25)]
-        public string RentalNo { get; set; }
+        public int RentalNo { get; set; }
         [Required] 
         public DateTime? RentalDate { get; set; }
         [Required]
