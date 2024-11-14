@@ -232,26 +232,108 @@
 
         public static void RentingsGenerate(ApplicationDbContext context)
         {
-            if (context.Customers.Any())
+            if (context.Rentings.Any())
             {
                 return;
             }
             var renting1 = new Renting
             {
                 RentalNo = 1,
-                RentalDate = DateTime.Now,
-                RentalDueTime = DateTime.Now,
+                RentalDate = new DateTime(2024, 11, 25),
+                RentalDueTime = new DateTime(2024, 12, 25),
                 DriveDistance = 23000,
                 CustomerId = 2,
 
             };
 
+            var renting2 = new Renting
+            {
+                RentalNo = 2,
+                RentalDate = new DateTime(2024,11, 16),
+                RentalDueTime = new DateTime(2024, 11, 21), 
+                DriveDistance = 21000,
+                CustomerId = 2,
+            };
 
-            context.Customers.AddRange();
+            var renting3 = new Renting
+            {
+                RentalNo = 3,
+                RentalDate = new DateTime(2024, 11, 16),
+                RentalDueTime = new DateTime(2024, 11, 16),
+                DriveDistance = 15000,
+                CustomerId = 3,
+            };
+
+            var renting4 = new Renting
+            {
+                RentalNo = 4,
+                RentalDate = new DateTime(2024, 11, 18),
+                RentalDueTime = new DateTime(2024, 11, 26),
+                DriveDistance = 17000,
+                CustomerId = 4,
+            };
+
+            var renting5 = new Renting
+            {
+                RentalNo = 5,
+                RentalDate = new DateTime(2024, 11, 19),
+                RentalDueTime = new DateTime(2024, 11, 27),
+                DriveDistance = 25000,
+                CustomerId = 5,
+            };
+
+            var renting6 = new Renting
+            {
+                RentalNo = 6,
+                RentalDate = new DateTime(2024, 11, 20),
+                RentalDueTime = new DateTime(2024, 11, 27),
+                DriveDistance = 23000,
+                CustomerId = 6,
+            };
+
+            var renting7 = new Renting
+            {
+                RentalNo = 7,
+                RentalDate = new DateTime(2024, 12, 05),
+                RentalDueTime = new DateTime(2024, 12, 11),
+                DriveDistance = 21000,
+                CustomerId = 7,
+            };
+
+            var renting8 = new Renting
+            {
+                RentalNo = 8,
+                RentalDate = new DateTime(2024, 11, 23),
+                RentalDueTime = new DateTime(2024, 11, 29),
+                DriveDistance = 22000,
+                CustomerId = 8,
+            };
+
+            var renting9 = new Renting
+            {
+                RentalNo = 9,
+                RentalDate = new DateTime(2024, 11, 16),
+                RentalDueTime = new DateTime(2024, 11, 19),
+                DriveDistance = 24000,
+                CustomerId = 9,
+            };
+
+            var renting10 = new Renting
+            {
+                RentalNo = 10,
+                RentalDate = new DateTime(2024, 11, 17),
+                RentalDueTime = new DateTime(2024, 11, 20),
+                DriveDistance = 26000,
+                CustomerId = 10,
+            };
+
+
+
+            context.Rentings.AddRange(renting1, renting2, renting3, renting4, renting5, renting6, renting7, renting8, renting9, renting10);
 
             context.SaveChanges();
         }
     }
-
+     
 
 }

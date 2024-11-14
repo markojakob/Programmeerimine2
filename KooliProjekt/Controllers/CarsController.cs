@@ -6,23 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KooliProjekt.Data;
+using KooliProjekt.Services;
 
 namespace KooliProjekt.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICarService _carService;
 
-        public CarsController(ApplicationDbContext context)
+        public CarsController(ICarService carService)
         {
-            _context = context;
+            _carService = carService;
         }
 
         // GET: Cars
         public async Task<IActionResult> Index(int page = 1)
         {
-
-            return View(await _context.Cars.GetPagedAsync(page, 5));
+            var data = await _carService.List(page, 5);
+            
+            return View(data);
         }
 
         // GET: Cars/Details/5
@@ -33,8 +35,7 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var car = await _carService.Get(id.Value);
             if (car == null)
             {
                 return NotFound();
@@ -58,8 +59,8 @@ namespace KooliProjekt.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
-                await _context.SaveChangesAsync();
+                
+                await _carService.Save(car);
                 return RedirectToAction(nameof(Index));
             }
             return View(car);
@@ -73,7 +74,7 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _carService.Get(id.Value);
             if (car == null)
             {
                 return NotFound();
@@ -95,22 +96,7 @@ namespace KooliProjekt.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(car);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CarExists(car.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _carService.Save(car);
                 return RedirectToAction(nameof(Index));
             }
             return View(car);
@@ -124,8 +110,7 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var car = await _carService.Get(id.Value);
             if (car == null)
             {
                 return NotFound();
@@ -139,19 +124,9 @@ namespace KooliProjekt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var car = await _context.Cars.FindAsync(id);
-            if (car != null)
-            {
-                _context.Cars.Remove(car);
-            }
-
-            await _context.SaveChangesAsync();
+            await _carService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CarExists(int id)
-        {
-            return _context.Cars.Any(e => e.Id == id);
-        }
     }
 }

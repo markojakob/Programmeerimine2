@@ -3,26 +3,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Services
 {
-    public class CarService : ICarService
+    public class CustomerService : ICustomerService
     {
         private readonly ApplicationDbContext _context;
 
-        public CarService(ApplicationDbContext context)
+        public CustomerService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<PagedResult<Car>> List(int page, int pageSize)
+        public async Task<PagedResult<Customer>> List(int page, int pageSize)
         {
-            return await _context.Cars.GetPagedAsync(page, 5);
+            return await _context.Customers.GetPagedAsync(page, 5);
         }
 
-        public async Task<Car> Get(int id)
+        public async Task<Customer> Get(int id)
         {
-            return await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task Save(Car list)
+        public async Task Save(Customer list)
         {
             if (list.Id == 0)
             {
@@ -38,10 +38,10 @@ namespace KooliProjekt.Services
 
         public async Task Delete(int id)
         {
-            var car= await _context.Cars.FindAsync(id);
-            if (car != null)
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer != null)
             {
-                _context.Cars.Remove(car);
+                _context.Customers.Remove(customer);
                 await _context.SaveChangesAsync();
             }
         }

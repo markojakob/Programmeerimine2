@@ -6,23 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KooliProjekt.Data;
+using KooliProjekt.Services;
 
 namespace KooliProjekt.Controllers
 {
     public class RentingsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRentingService _rentingService;
 
-        public RentingsController(ApplicationDbContext context)
+        public RentingsController(IRentingService rentingService)
         {
-            _context = context;
+            _rentingService = rentingService;
         }
 
         // GET: Rentings
         public async Task<IActionResult> Index(int page = 1)
         {
-            var applicationDbContext = _context.Rentings.Include(r => r.Customer);
-            return View(await applicationDbContext.GetPagedAsync(1, 5));
+            var data = await _rentingService.List(page, 5);
+            return View(data);
         }
 
         // GET: Rentings/Details/5
@@ -33,9 +34,7 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var renting = await _context.Rentings
-                .Include(r => r.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var renting = await _rentingService.Get(id.Value);
             if (renting == null)
             {
                 return NotFound();
@@ -60,8 +59,7 @@ namespace KooliProjekt.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(renting);
-                await _context.SaveChangesAsync();
+                await _rentingService.Save(renting);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
@@ -76,12 +74,12 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var renting = await _context.Rentings.FindAsync(id);
+            var renting = await _rentingService.Get(id.Value);
             if (renting == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_rentingsService.Customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
@@ -99,22 +97,7 @@ namespace KooliProjekt.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(renting);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RentingExists(renting.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _rentingService.Save(renting);               
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
@@ -129,9 +112,7 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var renting = await _context.Rentings
-                .Include(r => r.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var renting = await _rentingService.Get(id.Value);
             if (renting == null)
             {
                 return NotFound();
@@ -145,13 +126,7 @@ namespace KooliProjekt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var renting = await _context.Rentings.FindAsync(id);
-            if (renting != null)
-            {
-                _context.Rentings.Remove(renting);
-            }
-
-            await _context.SaveChangesAsync();
+            await _rentingService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
