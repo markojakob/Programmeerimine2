@@ -13,10 +13,12 @@ namespace KooliProjekt.Controllers
     public class RentingsController : Controller
     {
         private readonly IRentingService _rentingService;
+        private readonly ICustomerService _customerService;
 
-        public RentingsController(IRentingService rentingService)
+        public RentingsController(IRentingService rentingService, ICustomerService customerService)
         {
             _rentingService = rentingService;
+            _customerService = customerService;
         }
 
         // GET: Rentings
@@ -44,9 +46,10 @@ namespace KooliProjekt.Controllers
         }
 
         // GET: Rentings/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName");
+            var customers = await _customerService.Lookup();
+            ViewData["CustomerId"] = new SelectList(customers, "Id", "FullName");
             return View();
         }
 
@@ -66,7 +69,8 @@ namespace KooliProjekt.Controllers
                 await _rentingService.Save(renting);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
+            var customers = await _customerService.Lookup();
+            ViewData["CustomerId"] = new SelectList(customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
@@ -83,7 +87,8 @@ namespace KooliProjekt.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
+            var customers = await _customerService.Lookup();
+            ViewData["CustomerId"] = new SelectList(customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
@@ -104,7 +109,8 @@ namespace KooliProjekt.Controllers
                 await _rentingService.Save(renting);               
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
+            var customers = await _customerService.Lookup();
+            ViewData["CustomerId"] = new SelectList(customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
