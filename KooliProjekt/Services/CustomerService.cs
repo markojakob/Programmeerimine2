@@ -1,6 +1,7 @@
 ﻿using KooliProjekt.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace KooliProjekt.Services
 {
     public class CustomerService : ICustomerService
@@ -15,6 +16,11 @@ namespace KooliProjekt.Services
         public async Task<PagedResult<Customer>> List(int page, int pageSize)
         {
             return await _context.Customers.GetPagedAsync(page, 5);
+        }
+
+        public async Task<IList<Customer>> Lookup()
+        {
+            return await _context.Customers.OrderBy(c => c.LastName).ToListAsync();
         }
 
         public async Task<Customer> Get(int id)

@@ -50,6 +50,10 @@ namespace KooliProjekt.Controllers
             return View();
         }
 
+
+
+
+
         // POST: Rentings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -79,7 +83,7 @@ namespace KooliProjekt.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_rentingsService.Customers, "Id", "FullName", renting.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", renting.CustomerId);
             return View(renting);
         }
 
@@ -128,11 +132,6 @@ namespace KooliProjekt.Controllers
         {
             await _rentingService.Delete(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool RentingExists(int id)
-        {
-            return _context.Rentings.Any(e => e.Id == id);
         }
     }
 }

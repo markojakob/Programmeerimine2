@@ -109,7 +109,7 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var customer = await _customerService.Get(id.Value)
+            var customer = await _customerService.Get(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -126,11 +126,6 @@ namespace KooliProjekt.Controllers
             await _customerService.Delete(id);
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
         }
     }
 }
