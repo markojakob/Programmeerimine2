@@ -1,4 +1,5 @@
 using KooliProjekt.Data;
+using KooliProjekt.Data.Repositories;
 using KooliProjekt.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace KooliProjekt
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IRentingService, RentingService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
@@ -51,18 +53,15 @@ namespace KooliProjekt
             app.MapRazorPages();
 #if DEBUG
             using (var scope = app.Services.CreateScope())
+            using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+            using (var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>())
             {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                // Veenduge, et andmebaas on loodud ja migratsioonid on tehtud
-                context.Database.Migrate();
-
-                // Kutsu SeedData meetod, et täita algandmed
+                context.Database.EnsureCreated();
                 SeedData.CarsGenerate(context);
                 SeedData.CustomerGenerate(context);
                 SeedData.RentingsGenerate(context);
-#endif
             }
+#endif
             app.Run();
         }
     }
