@@ -6,17 +6,23 @@ namespace KooliProjekt.Data.Repositories
         private readonly ApplicationDbContext _context;
 
         public UnitOfWork(ApplicationDbContext context,
-            ICustomerRepository todoItemRepository,
-            ICarRepository carRepository)
+            ICustomerRepository customerRepository,
+            ICarRepository carRepository,
+            IRentingRepository rentingRepository)
         {
             _context = context;
 
-            CustomerRepository = todoItemRepository;
+            CustomerRepository = customerRepository;
             CarRepository = carRepository;
+            RentingRepository = rentingRepository;
         }
 
         public ICustomerRepository CustomerRepository { get; private set; }
         public ICarRepository CarRepository { get; private set; }
+
+        public IRentingRepository RentingRepository { get; private set; }
+
+
 
         public async Task BeginTransaction()
         {

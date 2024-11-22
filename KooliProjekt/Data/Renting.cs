@@ -2,9 +2,8 @@
 
 namespace KooliProjekt.Data
 {
-    public class Renting
+    public class Renting : Entity
     {
-        public int Id { get; set; }
         
         [Required]
         public int RentalNo { get; set; }

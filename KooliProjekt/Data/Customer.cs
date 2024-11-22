@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KooliProjekt.Data
 {
-    public class Customer
+    public class Customer : Entity
     {
-        public int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -19,6 +18,12 @@ namespace KooliProjekt.Data
         public string FullName 
         { 
             get { return FirstName + " " + LastName; }
+        }
+        public IList<Car> Cars { get; set; }
+
+        public Customer()
+        {
+            Cars = new List<Car>();
         }
     }
 }

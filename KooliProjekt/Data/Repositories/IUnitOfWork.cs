@@ -7,5 +7,8 @@
         Task Rollback();
 
         ICarRepository CarRepository { get; }
+        IRentingRepository RentingRepository { get; }
+        ICustomerRepository CustomerRepository { get; }
+
     }
 }

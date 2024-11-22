@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KooliProjekt.Data;
 using KooliProjekt.Services;
+using KooliProjekt.Data.Repositories;
 
 namespace KooliProjekt.Controllers
 {
     public class CustomersController : Controller
     {
         private readonly ICustomerService _customerService;
-
-        public CustomersController(ICustomerService customerService)
+        private readonly IUnitOfWork _unitOfWork;
+        public CustomersController(ICustomerService customerService,
+            IUnitOfWork unitOfWork)
         {
             _customerService = customerService;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Customers

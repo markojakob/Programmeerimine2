@@ -2,9 +2,8 @@
 
 namespace KooliProjekt.Data
 {
-    public class Car
+    public class Car : Entity
     {
-        public int Id { get; set; }
         [Required]
         [StringLength(30)]
         public string Model  { get; set; }
@@ -21,6 +20,9 @@ namespace KooliProjekt.Data
         [Required]
         public string Category { get; set; }
 
-        
+        public IList<Renting> Rentings { get; set; }
+
+        public IList<Customer> Cars { get; set; }
+
     }
 }
