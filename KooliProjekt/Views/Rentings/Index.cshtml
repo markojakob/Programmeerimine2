@@ -1,4 +1,4 @@
-﻿@model PagedResult<KooliProjekt.Data.Renting>
+﻿@model RentingsIndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,28 +9,46 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form method="get">
+    <div class="form-group">
+        <label class="control-label">Märksõna</label>
+        <input asp-for="Search.Keyword" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Kõik itemid tehtud</label>
+        <select asp-for="Search.Done" class="form-control">
+            <option value="">-</option>
+            <option value="true">Jah</option>
+            <option value="false">Ei</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">Otsi</button>
+        <a asp-controller="Rentings" asp-action="Index" class="btn btn-primary">Reset</a>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                RentalNo
+                @Html.DisplayNameFor(model => model.Data.Results[0].RentalNo)
             </th>
             <th>
-                RentalDate
+                @Html.DisplayNameFor(model => model.Data.Results[0].RentalDate)
             </th>
             <th>
-                RentalDueTime
+                @Html.DisplayNameFor(model => model.Data.Results[0].RentalDueTime)
             </th>
             <th>
-                DriveDistance
+                @Html.DisplayNameFor(model => model.Data.Results[0].DriveDistance)
             </th>
             <th>
-                Customer
+                @Html.DisplayNameFor(model => model.Data.Results[0].Customer)
             </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Results) {
+@foreach (var item in Model.Data) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.RentalNo)
@@ -56,3 +74,5 @@
 }
     </tbody>
 </table>
+
+@(await Component.InvokeAsync<PagerViewComponent>(Model.Data))

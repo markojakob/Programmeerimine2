@@ -1,4 +1,5 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Search;
 using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Services
@@ -12,38 +13,60 @@ namespace KooliProjekt.Services
             _context = context;
         }
 
-        public async Task<PagedResult<Car>> List(int page, int pageSize)
+        public async Task Delete(int id)
         {
-            return await _context.Cars.GetPagedAsync(page, 5);
+            await _context.Cars
+                .Where(list => list.Id == id)
+                .ExecuteDeleteAsync();
         }
 
         public async Task<Car> Get(int id)
         {
-            return await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Cars.FindAsync(id);
+        }
+
+        public async Task<PagedResult<Car>> List(int page, int pageSize, TodoListsSearch search = null)
+        {
+            var query = _context.Cars.AsQueryable();
+
+            search = search ?? new CarsSearch();
+
+            if (!string.IsNullOrWhiteSpace(search.Keyword))
+            {
+                query = query.Where(list => list.CarMaker.Contains(search.Keyword));
+            }
+
+            if (search.Done != null)
+            {
+                query = query.Where(list => list.Model.Any());
+
+                if (search.Done.Value)
+                {
+                    query = query.Where(list => list.Items.All(item => item.IsDone));
+                }
+                else
+                {
+                    query = query.Where(list => list.Items.Any(item => !item.IsDone));
+                }
+            }
+
+            return await query
+                .OrderBy(list => list.CarMaker)
+                .GetPagedAsync(page, pageSize);
         }
 
         public async Task Save(Car list)
         {
             if (list.Id == 0)
             {
-                _context.Add(list);
+                _context.Cars.Add(list);
             }
             else
             {
-                _context.Update(list);
+                _context.Cars.Update(list);
             }
 
             await _context.SaveChangesAsync();
-        }
-
-        public async Task Delete(int id)
-        {
-            var car= await _context.Cars.FindAsync(id);
-            if (car != null)
-            {
-                _context.Cars.Remove(car);
-                await _context.SaveChangesAsync();
-            }
         }
     }
 }
