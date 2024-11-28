@@ -20,11 +20,14 @@ namespace KooliProjekt.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1, CustomersIndexModel model = null)
         {
-            var data = await _customerService.List(page, 5);
-            return View(data);
+            model = model ?? new CustomersIndexModel();
+            model.Data = await _customerService.List(page, 5, model.Search);
+
+            return View(model);
         }
+
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)

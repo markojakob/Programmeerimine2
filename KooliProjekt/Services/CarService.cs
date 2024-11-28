@@ -25,7 +25,7 @@ namespace KooliProjekt.Services
             return await _context.Cars.FindAsync(id);
         }
 
-        public async Task<PagedResult<Car>> List(int page, int pageSize, TodoListsSearch search = null)
+        public async Task<PagedResult<Car>> List(int page, int pageSize, CarsSearch search = null)
         {
             var query = _context.Cars.AsQueryable();
 
@@ -42,11 +42,11 @@ namespace KooliProjekt.Services
 
                 if (search.Done.Value)
                 {
-                    query = query.Where(list => list.Items.All(item => item.IsDone));
+                    query = query.Where(list => list.CarMaker.All(item => item.));
                 }
                 else
                 {
-                    query = query.Where(list => list.Items.Any(item => !item.IsDone));
+                    query = query.Where(list => list.CarMaker.Any(item => !item.IsDone));
                 }
             }
 
