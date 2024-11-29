@@ -1,4 +1,7 @@
-﻿namespace KooliProjekt.Data
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
+namespace KooliProjekt.Data
 {
     public static class SeedData
     {
@@ -236,13 +239,26 @@
             {
                 return;
             }
+
+            var customer1 = context.Customers.FirstOrDefault(); 
+            var customer2 = context.Customers.Skip(1).Take(1).FirstOrDefault();
+            var customer3 = context.Customers.Skip(2).Take(2).FirstOrDefault();
+            var customer4 = context.Customers.Skip(3).Take(3).FirstOrDefault();
+            var customer5 = context.Customers.Skip(4).Take(4).FirstOrDefault();
+            var customer6 = context.Customers.Skip(5).Take(5).FirstOrDefault();
+            var customer7 = context.Customers.Skip(6).Take(6).FirstOrDefault();
+            var customer8 = context.Customers.Skip(7).Take(7).FirstOrDefault();
+            var customer9 = context.Customers.Skip(8).Take(8).FirstOrDefault();
+            var customer10 = context.Customers.Skip(9).Take(9).FirstOrDefault();
+
+
             var renting1 = new Renting
             {
                 RentalNo = 1,
                 RentalDate = new DateTime(2024, 11, 25),
                 RentalDueTime = new DateTime(2024, 12, 25),
                 DriveDistance = 23000,
-                CustomerId = 2,
+                CustomerId = customer1.Id,
 
             };
 
@@ -252,7 +268,7 @@
                 RentalDate = new DateTime(2024,11, 16),
                 RentalDueTime = new DateTime(2024, 11, 21), 
                 DriveDistance = 21000,
-                CustomerId = 2,
+                CustomerId = customer2.Id,
             };
 
             var renting3 = new Renting
@@ -261,7 +277,7 @@
                 RentalDate = new DateTime(2024, 11, 16),
                 RentalDueTime = new DateTime(2024, 11, 16),
                 DriveDistance = 15000,
-                CustomerId = 3,
+                CustomerId = customer3.Id,
             };
 
             var renting4 = new Renting
@@ -270,7 +286,7 @@
                 RentalDate = new DateTime(2024, 11, 18),
                 RentalDueTime = new DateTime(2024, 11, 26),
                 DriveDistance = 17000,
-                CustomerId = 4,
+                CustomerId = customer4.Id,
             };
 
             var renting5 = new Renting
@@ -279,7 +295,7 @@
                 RentalDate = new DateTime(2024, 11, 19),
                 RentalDueTime = new DateTime(2024, 11, 27),
                 DriveDistance = 25000,
-                CustomerId = 5,
+                CustomerId = customer5.Id,
             };
 
             var renting6 = new Renting
@@ -288,7 +304,7 @@
                 RentalDate = new DateTime(2024, 11, 20),
                 RentalDueTime = new DateTime(2024, 11, 27),
                 DriveDistance = 23000,
-                CustomerId = 6,
+                CustomerId = customer6.Id,
             };
 
             var renting7 = new Renting
@@ -297,7 +313,7 @@
                 RentalDate = new DateTime(2024, 12, 05),
                 RentalDueTime = new DateTime(2024, 12, 11),
                 DriveDistance = 21000,
-                CustomerId = 7,
+                CustomerId = customer7.Id,
             };
 
             var renting8 = new Renting
@@ -306,7 +322,7 @@
                 RentalDate = new DateTime(2024, 11, 23),
                 RentalDueTime = new DateTime(2024, 11, 29),
                 DriveDistance = 22000,
-                CustomerId = 8,
+                CustomerId = customer8.Id,
             };
 
             var renting9 = new Renting
@@ -315,7 +331,8 @@
                 RentalDate = new DateTime(2024, 11, 16),
                 RentalDueTime = new DateTime(2024, 11, 19),
                 DriveDistance = 24000,
-                CustomerId = 9,
+                CustomerId = customer9.Id,
+               
             };
 
             var renting10 = new Renting
@@ -324,7 +341,7 @@
                 RentalDate = new DateTime(2024, 11, 17),
                 RentalDueTime = new DateTime(2024, 11, 20),
                 DriveDistance = 26000,
-                CustomerId = 10,
+                CustomerId = customer10.Id,
             };
 
 
@@ -337,3 +354,4 @@
      
 
 }
+

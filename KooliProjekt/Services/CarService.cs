@@ -36,20 +36,6 @@ namespace KooliProjekt.Services
                 query = query.Where(list => list.CarMaker.Contains(search.Keyword));
             }
 
-            if (search.Done != null)
-            {
-                query = query.Where(list => list.Model.Any());
-
-                if (search.Done.Value)
-                {
-                    query = query.Where(list => list.CarMaker.All(item => item.));
-                }
-                else
-                {
-                    query = query.Where(list => list.CarMaker.Any(item => !item.IsDone));
-                }
-            }
-
             return await query
                 .OrderBy(list => list.CarMaker)
                 .GetPagedAsync(page, pageSize);

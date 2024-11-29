@@ -25,7 +25,7 @@ namespace KooliProjekt.Services
             return await _context.Rentings.FindAsync(id);
         }
 
-        public async Task<PagedResult<Renting>> List(int page, int pageSize, CarsSearch search = null)
+        public async Task<PagedResult<Renting>> List(int page, int pageSize, RentingsSearch search = null)
         {
             var query = _context.Rentings.AsQueryable();
 
@@ -33,25 +33,37 @@ namespace KooliProjekt.Services
 
             if (!string.IsNullOrWhiteSpace(search.Keyword))
             {
-                query = query.Where(list => list.RentalNo.Contains(search.Keyword));
+                query = query.Where(list => list.RentalNo.ToString().Contains(search.Keyword));
             }
 
-            if (search.Done != null)
-            {
-                query = query.Where(list => list.M.Any());
 
-                if (search.Done.Value)
+            // Done asemel IsActive vmt
+            // true = rent on käimas
+            // false = rent on lõppenud või pole alanud
+
+            if (search.Active != null)
+            {
+                
+                if (search.Active.Value)
                 {
-                    query = query.Where(list => list.Lines.All(item => item.IsDone));
+                    
+                    query = query.Where(list => list.Lines.All(item => item.IsActive));  
                 }
                 else
                 {
-                    query = query.Where(list => list.Lines.Any(item => !item.IsDone));
+                   
+                    query = query.Where(list => list.Lines.Any(item => !item.IsActive)); 
                 }
             }
+            else
+            {
+              
+                query = query.Where(list => list.Lines.Any()); 
+            }
+
 
             return await query
-                .OrderBy(list => list.RentalNo
+                .OrderBy(list => list.RentalNo)
                 .GetPagedAsync(page, pageSize);
         }
 
@@ -69,5 +81,4 @@ namespace KooliProjekt.Services
             await _context.SaveChangesAsync();
         }
     }
-}
 }

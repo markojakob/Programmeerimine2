@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KooliProjekt.Data;
 using KooliProjekt.Services;
+using KooliProjekt.Models;
 
 namespace KooliProjekt.Controllers
 {

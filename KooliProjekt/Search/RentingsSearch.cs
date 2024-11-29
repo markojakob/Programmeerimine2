@@ -2,7 +2,7 @@
 {
     public class RentingsSearch
     {
-        public bool? Done { get; set; }
+        public bool? Active { get; set; }
         public string Keyword { get; set; }
     }
 }

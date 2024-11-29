@@ -21,6 +21,6 @@ namespace KooliProjekt.Data
         [Required]
         public string Category { get; set; }
 
-        
+        public bool IsActive { get; set; }
     }
 }
