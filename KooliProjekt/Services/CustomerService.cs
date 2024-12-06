@@ -37,7 +37,8 @@ namespace KooliProjekt.Services
             }
 
             return await query
-                .OrderBy(list => list.FullName)
+                .OrderBy(list => list.FirstName)
+                .ThenBy(list => list.LastName)
                 .GetPagedAsync(page, pageSize);
         }
 

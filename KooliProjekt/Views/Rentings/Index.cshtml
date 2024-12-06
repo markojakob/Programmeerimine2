@@ -15,7 +15,7 @@
         <input asp-for="Search.Keyword" class="form-control" />
     </div>
     <div class="form-group">
-        <label class="control-label">Kõik itemid tehtud</label>
+        <label class="control-label">Rent tehtud</label>
         <select asp-for="Search.Active" class="form-control">
             <option value="">-</option>
             <option value="true">Jah</option>
@@ -63,7 +63,7 @@
                 @Html.DisplayFor(modelItem => item.DriveDistance)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.Address)
+                @Html.DisplayFor(modelItem => item.Customer.FullName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

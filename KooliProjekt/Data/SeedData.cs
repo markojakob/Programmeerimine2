@@ -275,7 +275,7 @@ namespace KooliProjekt.Data
             {
                 RentalNo = 3,
                 RentalDate = new DateTime(2024, 11, 16),
-                RentalDueTime = new DateTime(2024, 11, 16),
+                RentalDueTime = new DateTime(2024, 11, 19),
                 DriveDistance = 15000,
                 CustomerId = customer3.Id,
             };

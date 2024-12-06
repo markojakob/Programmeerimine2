@@ -32,10 +32,9 @@ namespace KooliProjekt.Services
             search = search ?? new RentingsSearch();
 
             if (!string.IsNullOrWhiteSpace(search.Keyword))
-            {
+            { 
                 query = query.Where(list => list.RentalNo.ToString().Contains(search.Keyword));
             }
-
 
             // Done asemel IsActive vmt
             // true = rent on käimas
@@ -55,14 +54,10 @@ namespace KooliProjekt.Services
                     query = query.Where(list => list.Lines.Any(item => !item.IsActive)); 
                 }
             }
-            else
-            {
-              
-                query = query.Where(list => list.Lines.Any()); 
-            }
 
 
             return await query
+                .Include(renting => renting.Customer)
                 .OrderBy(list => list.RentalNo)
                 .GetPagedAsync(page, pageSize);
         }
