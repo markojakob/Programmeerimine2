@@ -222,5 +222,113 @@ namespace KooliProjekt.UnitTests.ControllerTests
             );
             Assert.Equal(list, result.Model);
         }
+
+        [Fact]
+        public async Task Create_should_return_RedirectToAction_when_model_state_was_found()
+        {
+            // Arrange
+
+            var customer = new Customer { Id = 1 };
+
+            // Act
+            var result = await _controller.Create(customer) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+        }
+
+        [Fact]
+        public async Task Create_should_return_view_when_model_state_is_not_valid()
+        {
+            // Arrange
+
+            var customer = new Customer { Id = 1 };
+            _controller.ModelState.AddModelError("key", "Error");
+            // Act
+            var result = await _controller.Create(customer) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+
+        }
+
+        [Fact]
+        public async Task Edit_should_return_NotFound_when_id_is_not_car_id()
+        {
+            // Arrange
+            var customer = new Customer { Id = 1 };  
+            int id = 2;  
+
+            // Act
+            var result = await _controller.Edit(id, customer);  
+
+            // Assert
+            Assert.NotNull(result);  
+            Assert.IsType<NotFoundResult>(result);  
+        }
+
+
+        [Fact]
+        public async Task Edit_should_return_RedirectToAction_when_Modelstate_is_valid()
+        {
+            // Arrange
+            
+            var customer = new Customer {
+                Id = 1 ,
+                FirstName = "Anna",
+                LastName = "Kivi",
+                PhoneNum = 51234567,
+                Address = "Narva"
+            };
+            // Act
+            var result = await _controller.Edit(customer.Id, customer) as RedirectToActionResult;
+
+            // Assert
+
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+
+        }
+
+        [Fact]
+        public async Task Edit_should_return_view__when_model_state_is_not_valid()
+        {
+            int id = 2;
+            var customer = new Customer
+            {
+                Id = id ,
+                FirstName = "Anna",
+                LastName = "Kivi",
+                PhoneNum = 51234567,
+                Address = "Narva"
+            };
+            _controller.ModelState.AddModelError("key", "Error");
+
+            // Act
+            var result = await _controller.Edit(id, customer) as ViewResult;
+
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task DeleteConfirmed_should_delete_list()
+        {
+            // Arrange
+            int id = 1;
+            _customersServiceMock
+                .Setup(x => x.Delete(id))
+                .Verifiable();
+            _controller.ModelState.AddModelError("key", "error");
+
+            // Act
+            var result = await _controller.DeleteConfirmed(id) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            _customersServiceMock.VerifyAll();
+        }
     }
 }
