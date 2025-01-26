@@ -254,7 +254,7 @@ namespace KooliProjekt.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Edit_should_return_NotFound_when_id_is_not_car_id()
+        public async Task Edit_should_return_NotFound_when_id_is_not_customer_id()
         {
             // Arrange
             var customer = new Customer { Id = 1 };  

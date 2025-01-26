@@ -240,5 +240,190 @@ namespace KooliProjekt.UnitTests.ControllerTests
             );
             Assert.Equal(list, result.Model);
         }
+
+
+        [Fact]
+        public async Task Create_should_return_RedirectToAction_when_model_state_was_found()
+        {
+            // Arrange
+
+            var customer = new Customer
+            {
+                Id = 1,
+                FirstName = "Mati",
+                LastName = "Maasikas",
+                PhoneNum = 57934854,
+                Address = "Pärnu"
+            };
+            var renting = new Renting
+            {
+                RentalNo = 1,
+                RentalDate = new DateTime(2024, 11, 16),
+                RentalDueTime = new DateTime(2024, 11, 21),
+                DriveDistance = 21000,
+                CustomerId = customer.Id,
+            };
+
+            // Act
+            var result = await _controller.Create(renting) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+        }
+
+        [Fact]
+        public async Task Create_should_return_view_when_model_state_is_not_valid()
+        {
+            // Arrange
+            var customers = new List<Customer>();
+            var customer = new Customer
+            {
+                Id = 1,
+                FirstName = "Mati",
+                LastName = "Maasikas",
+                PhoneNum = 57934854,
+                Address = "Pärnu"
+            };
+            var renting = new Renting
+            {
+                RentalNo = 1,
+                RentalDate = new DateTime(2024, 11, 16),
+                RentalDueTime = new DateTime(2024, 11, 21),
+                DriveDistance = 21000,
+                CustomerId = customer.Id,
+            };
+            _customerServiceMock
+                .Setup(x => x.Lookup())
+                .ReturnsAsync(customers);
+            _controller.ModelState.AddModelError("key", "Error");
+            // Act
+            var result = await _controller.Create(renting) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+
+        }
+
+        [Fact]
+        public async Task Edit_should_return_NotFound_when_id_is_not_renting_id()
+        {
+            // Arrange
+            var customer1 = new Customer
+            {
+                Id = 1,
+                FirstName = "Mati",
+                LastName = "Maasikas",
+                PhoneNum = 57934854,
+                Address = "Pärnu"
+            };
+            var renting = new Renting
+            {
+                RentalNo = 1,
+                RentalDate = new DateTime(2024, 11, 25),
+                RentalDueTime = new DateTime(2024, 12, 25),
+                DriveDistance = 23000,
+                CustomerId = customer1.Id,
+            };
+            int id = 2;
+
+            // Act
+            var result = await _controller.Edit(id, renting) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async Task Edit_should_return_RedirectToAction_when_Modelstate_is_valid()
+        {
+            // Arrange
+            var customer1 = new Customer
+            {
+                Id = 1,
+                FirstName = "Mati",
+                LastName = "Maasikas",
+                PhoneNum = 57934854,
+                Address = "Pärnu"
+            };
+            var renting = new Renting
+            {
+                RentalNo = 1,
+                RentalDate = new DateTime(2024, 11, 25),
+                RentalDueTime = new DateTime(2024, 12, 25),
+                DriveDistance = 23000,
+                CustomerId = customer1.Id,
+
+            };
+            // Act
+            var result = await _controller.Edit(renting.Id, renting) as RedirectToActionResult;
+
+            // Assert
+
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+
+        }
+
+        [Fact]
+        public async Task Edit_should_return_view__when_model_state_is_not_valid()
+        {
+            int id = 2;
+            var list = new Renting { Id = id };
+            var customers = new List<Customer> 
+            {
+                new Customer 
+                {
+                    Id = 2,
+                    FirstName = "Mati",
+                    LastName = "Maasikas",
+                    PhoneNum = 57934854,
+                    Address = "Pärnu"
+                }
+            };
+            var renting = new Renting
+            {
+                Id= id,
+                RentalNo = 2,
+                RentalDate = new DateTime(2024, 11, 25),
+                RentalDueTime = new DateTime(2024, 12, 25),
+                DriveDistance = 23000,
+                CustomerId = 2
+
+            };
+            _controller.ModelState.AddModelError("key", "Error");
+            _customerServiceMock
+                .Setup(x => x.Lookup())
+                .ReturnsAsync(customers);
+
+            // Act
+            var result = await _controller.Edit(id, renting) as ViewResult;
+
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(renting, result.Model);
+        }
+
+        [Fact]
+        public async Task DeleteConfirmed_should_delete_id()
+        {
+            // Arrange
+            int id = 2;
+
+            _rentingServiceMock
+                .Setup(x => x.Delete(id))
+                .Verifiable();
+            _controller.ModelState.AddModelError("key", "error");
+            // Act
+            var result = await _controller.DeleteConfirmed(id) as RedirectToActionResult;
+
+            // Assert
+
+            Assert.NotNull(result);
+            Assert.Equal(nameof(_controller.Index), result.ActionName);
+            _rentingServiceMock.VerifyAll();
+        }
     }
 }
