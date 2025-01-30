@@ -2,10 +2,11 @@
 
 namespace KooliProjekt.Data.Repositories
 {
-    public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
+    public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository 
     {
         public CustomerRepository(ApplicationDbContext context) : base(context)
         {
+
         }
 
         public override async Task<Customer> Get(int id)
@@ -22,5 +23,12 @@ namespace KooliProjekt.Data.Repositories
                 .GetPagedAsync(page, pageSize);
         }
 
+        public async Task<IList<Customer>> Lookup()
+        {
+            return await DbContext.Customers
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.FirstName)
+                .ToListAsync();
+        }
     }
 }

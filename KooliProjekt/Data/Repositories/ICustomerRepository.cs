@@ -7,5 +7,6 @@
         Task Save(Customer item);
         Task Delete(int id);
 
+        Task<IList<Customer>> Lookup();
     }
 }
