@@ -44,11 +44,11 @@ namespace KooliProjekt.UnitTests.ControllerTests
             controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
             // Act
-            var result = controller.Privacy() as ViewResult;
+            var result = controller.Error() as ViewResult;
 
             // Assert
             Assert.NotNull(result);
-            Assert.True(result.ViewName == "Privacy" ||
+            Assert.True(result.ViewName == "Error" ||
                         string.IsNullOrEmpty(result.ViewName));
 
         }
