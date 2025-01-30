@@ -21,5 +21,6 @@ namespace KooliProjekt.Data.Repositories
             return await DbContext.Customers
                 .GetPagedAsync(page, pageSize);
         }
+
     }
 }

@@ -1,35 +1,36 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Services
 {
     public class RentingService : IRentingService
     {
-        private readonly IRentingService _rentingService;
+        private readonly IUnitOfWork _uow;
 
-        public RentingService(IRentingService rentingService)
+        public RentingService(IUnitOfWork uow)
         {
-            _rentingService = rentingService;
+            _uow = uow;
         }
 
         public async Task<PagedResult<Renting>> List(int page, int pageSize)
         {
-            return await _rentingService.List(page, 5);
+            return await _uow.RentingRepository.List(page, 5);
         }
 
         public async Task<Renting> Get(int id)
         {
-            return await _rentingService.Get(id);
+            return await _uow.RentingRepository.Get(id);
         }
 
         public async Task Save(Renting list)
         {
-            await _rentingService.Save(list);
+            await _uow.RentingRepository.Save(list);
         }
 
         public async Task Delete(int id)
         {
-            await _rentingService.Delete(id);
+            await _uow.RentingRepository.Delete(id);
         }
     }
 }

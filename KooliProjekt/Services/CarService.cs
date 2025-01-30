@@ -6,32 +6,32 @@ namespace KooliProjekt.Services
 {
     public class CarService : ICarService
     {
-        private readonly ICarRepository _carRepository;
+        private readonly IUnitOfWork _uow;
 
-        public CarService(ICarRepository carRepository)
+        public CarService(IUnitOfWork uow)
         {
-            _carRepository = carRepository;
+            _uow = uow;
         }
 
         public async Task<PagedResult<Car>> List(int page, int pageSize)
         {
-            return await _carRepository.List(page, 5);
+            return await _uow.CarRepository.List(page, 5);
         }
 
         public async Task<Car> Get(int id)
         {
-            return await _carRepository.Get(id);
+            return await _uow.CarRepository.Get(id);
         }
 
         public async Task Save(Car list)
         {
 
-            await _carRepository.Save(list);
+            await _uow.CarRepository.Save(list);
         }
 
         public async Task Delete(int id)
         {
-            await _carRepository.Delete(id);
+            await _uow.CarRepository.Delete(id);
         }
     }
 }

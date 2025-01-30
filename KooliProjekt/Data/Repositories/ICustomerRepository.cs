@@ -6,5 +6,6 @@
         Task<PagedResult<Customer>> List(int page, int pageSize);
         Task Save(Customer item);
         Task Delete(int id);
+
     }
 }
