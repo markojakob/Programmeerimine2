@@ -15,10 +15,10 @@ namespace KooliProjekt.Services
 
         public async Task Delete(int id)
         {
-            // Find the car by id
+            
             var carToDelete = await _context.Cars.FindAsync(id);
 
-            // Check if the car exists
+            
             if (carToDelete != null)
             {
                 _context.Cars.Remove(carToDelete);

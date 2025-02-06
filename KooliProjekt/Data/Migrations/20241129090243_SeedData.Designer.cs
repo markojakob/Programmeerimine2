@@ -61,12 +61,7 @@ namespace KooliProjekt.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("RentingId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RentingId");
 
                     b.ToTable("Cars");
                 });
@@ -333,12 +328,6 @@ namespace KooliProjekt.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("KooliProjekt.Data.Car", b =>
-                {
-                    b.HasOne("KooliProjekt.Data.Renting", null)
-                        .WithMany("Lines")
-                        .HasForeignKey("RentingId");
-                });
 
             modelBuilder.Entity("KooliProjekt.Data.Renting", b =>
                 {
