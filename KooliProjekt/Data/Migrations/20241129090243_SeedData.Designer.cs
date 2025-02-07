@@ -390,11 +390,6 @@ namespace KooliProjekt.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
-
-            modelBuilder.Entity("KooliProjekt.Data.Renting", b =>
-                {
-                    b.Navigation("Lines");
-                });
 #pragma warning restore 612, 618
         }
     }

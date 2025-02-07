@@ -9,7 +9,7 @@ using Xunit;
 
 namespace KooliProjekt.UnitTests.ServiceTests
 {
-    public class TodoListServiceTests : ServiceTestBase
+    public class CarServiceTests : ServiceTestBase
     {
         [Fact]
         public async Task Save_should_add_new_list()
@@ -95,5 +95,36 @@ namespace KooliProjekt.UnitTests.ServiceTests
             var count = DbContext.Cars.Count();
             Assert.Equal(0, count);
         }
+
+        [Fact]
+        public async Task Get_should_return_car_by_id()
+        {
+            // Arrange
+            var service = new CarService(DbContext);
+            var car = new Car
+            {
+                Id = 1,
+                Model = "A4",
+                CarMaker = "Audi",
+                Price = 5000,
+                Colour = "Green",
+                Description = "Fast",
+                Category = "Sedan",
+                KmTariff = 40000
+            };
+
+            DbContext.Cars.Add(car);
+            DbContext.SaveChanges();
+
+            // Act
+            var result = await service.Get(1);
+
+            // Arrange
+            Assert.Equal(car.Id, result.Id);
+
+        }
+
+
+
     }
 }

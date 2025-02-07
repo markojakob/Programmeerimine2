@@ -15,9 +15,14 @@ namespace KooliProjekt.Services
 
         public async Task Delete(int id)
         {
-            await _context.Rentings
-                .Where(list => list.Id == id)
-                .ExecuteDeleteAsync();
+            var rentingToDelete = await _context.Rentings.FindAsync(id);
+
+
+            if (rentingToDelete != null)
+            {
+                _context.Rentings.Remove(rentingToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Renting> Get(int id)
