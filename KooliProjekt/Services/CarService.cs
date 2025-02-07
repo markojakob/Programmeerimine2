@@ -25,7 +25,6 @@ namespace KooliProjekt.Services
 
         public async Task Save(Car list)
         {
-
             await _uow.CarRepository.Save(list);
         }
 

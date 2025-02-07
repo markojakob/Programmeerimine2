@@ -51,6 +51,7 @@ namespace KooliProjekt.UnitTests.ServiceTests
 
             _repositoryMock.Setup(x => x.Get(car.Id)).ReturnsAsync(car);
 
+            // Act
             var result = await _carService.Get(car.Id);
 
             // Assert
@@ -58,22 +59,44 @@ namespace KooliProjekt.UnitTests.ServiceTests
         }
 
         [Fact]
-        public async Task Save_should_save_car()
+        public async Task Save_should_add_new_car()
         {
             // Arrange
-            var car = new Car
-            {
-                Id = 1,
-            };
+            var newCar = new Car { Id = 0, CarMaker = "Toyota", Model = "Corolla" };
 
             // Act
-            await _carService.Save(car);
-
+            await _carService.Save(newCar);
+                
             // Assert
-            _repositoryMock.VerifyAll();    
-            
+            _repositoryMock.VerifyAll();
         }
 
-        
+        [Fact]
+        public async Task Save_should_update_old_car()
+        {
+            // Arrange
+            var existingCar = new Car { Id = 1, CarMaker = "Ford", Model = "Focus" };
+
+            // Act
+            await _carService.Save(existingCar);
+
+            // Assert
+            _repositoryMock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task Delete_should_remove_car()
+        {
+            // Arrange
+            var car = new Car { Id = 1, CarMaker = "Ford", Model = "Focus" };
+
+            _repositoryMock.Setup(x => x.Delete(It.Is<int>(id => id == car.Id)))
+               .Returns(Task.CompletedTask);
+            // Act
+            await _carService.Delete(car.Id);
+
+            // Assert
+            _repositoryMock.VerifyAll();
+        }
     }
 }
