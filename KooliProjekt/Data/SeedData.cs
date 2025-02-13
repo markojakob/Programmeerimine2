@@ -240,6 +240,18 @@ namespace KooliProjekt.Data
                 return;
             }
 
+            var car1 = context.Cars.FirstOrDefault();
+            var car2 = context.Cars.Skip(1).Take(1).FirstOrDefault();
+            var car3 = context.Cars.Skip(2).Take(2).FirstOrDefault();
+            var car4 = context.Cars.Skip(3).Take(3).FirstOrDefault();
+            var car5 = context.Cars.Skip(4).Take(4).FirstOrDefault();
+            var car6 = context.Cars.Skip(5).Take(5).FirstOrDefault();
+            var car7 = context.Cars.Skip(6).Take(6).FirstOrDefault();
+            var car8 = context.Cars.Skip(7).Take(7).FirstOrDefault();
+            var car9 = context.Cars.Skip(8).Take(8).FirstOrDefault();
+            var car10 = context.Cars.Skip(9).Take(9).FirstOrDefault();
+
+
             var customer1 = context.Customers.FirstOrDefault(); 
             var customer2 = context.Customers.Skip(1).Take(1).FirstOrDefault();
             var customer3 = context.Customers.Skip(2).Take(2).FirstOrDefault();
@@ -259,6 +271,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 12, 25),
                 DriveDistance = 23000,
                 CustomerId = customer1.Id,
+                CarId = car1.Id,
 
             };
 
@@ -269,6 +282,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 21), 
                 DriveDistance = 21000,
                 CustomerId = customer2.Id,
+                CarId = car2.Id,
             };
 
             var renting3 = new Renting
@@ -278,6 +292,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 19),
                 DriveDistance = 15000,
                 CustomerId = customer3.Id,
+                CarId = car3.Id,
             };
 
             var renting4 = new Renting
@@ -287,6 +302,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 26),
                 DriveDistance = 17000,
                 CustomerId = customer4.Id,
+                CarId = car4.Id,
             };
 
             var renting5 = new Renting
@@ -296,6 +312,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 27),
                 DriveDistance = 25000,
                 CustomerId = customer5.Id,
+                CarId = car5.Id,
             };
 
             var renting6 = new Renting
@@ -305,6 +322,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 27),
                 DriveDistance = 23000,
                 CustomerId = customer6.Id,
+                CarId = car6.Id,
             };
 
             var renting7 = new Renting
@@ -314,6 +332,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 12, 11),
                 DriveDistance = 21000,
                 CustomerId = customer7.Id,
+                CarId= car7.Id,
             };
 
             var renting8 = new Renting
@@ -323,6 +342,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 29),
                 DriveDistance = 22000,
                 CustomerId = customer8.Id,
+                CarId= car8.Id,
             };
 
             var renting9 = new Renting
@@ -332,6 +352,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 19),
                 DriveDistance = 24000,
                 CustomerId = customer9.Id,
+                CarId= car9.Id,
                
             };
 
@@ -342,6 +363,7 @@ namespace KooliProjekt.Data
                 RentalDueTime = new DateTime(2024, 11, 20),
                 DriveDistance = 26000,
                 CustomerId = customer10.Id,
+                CarId= car10.Id,
             };
 
 

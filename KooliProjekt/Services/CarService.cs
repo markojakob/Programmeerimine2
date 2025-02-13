@@ -15,9 +15,15 @@ namespace KooliProjekt.Services
 
         public async Task Delete(int id)
         {
-            await _context.Cars
-                .Where(list => list.Id == id)
-                .ExecuteDeleteAsync();
+            
+            var carToDelete = await _context.Cars.FindAsync(id);
+
+            
+            if (carToDelete != null)
+            {
+                _context.Cars.Remove(carToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Car> Get(int id)

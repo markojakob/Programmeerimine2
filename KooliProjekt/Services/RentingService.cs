@@ -15,9 +15,14 @@ namespace KooliProjekt.Services
 
         public async Task Delete(int id)
         {
-            await _context.Rentings
-                .Where(list => list.Id == id)
-                .ExecuteDeleteAsync();
+            var rentingToDelete = await _context.Rentings.FindAsync(id);
+
+
+            if (rentingToDelete != null)
+            {
+                _context.Rentings.Remove(rentingToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Renting> Get(int id)
@@ -42,16 +47,20 @@ namespace KooliProjekt.Services
 
             if (search.Active != null)
             {
-                
-                if (search.Active.Value)
+                // Kas on aktivne või mitte - seda saab otsustada RentalDate ja
+                // RentalDueTime abil
+                var now = DateTime.Now;
+                if (search.Active == true)
                 {
-                    
-                    query = query.Where(list => list.Lines.All(item => item.IsActive));  
+                    query = query.Where(list =>
+                        list.RentalDate >= now && list.RentalDueTime > now
+                    );
                 }
-                else
+                else if (search.Active == false)
                 {
-                   
-                    query = query.Where(list => list.Lines.Any(item => !item.IsActive)); 
+                    query = query.Where(list =>
+                        !(list.RentalDate >= now && list.RentalDueTime > now)
+                    );
                 }
             }
 

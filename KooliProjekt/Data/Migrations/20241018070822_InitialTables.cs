@@ -62,23 +62,13 @@ namespace KooliProjekt.Data.Migrations
                     Colour = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     KmTariff = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RentingId = table.Column<int>(type: "int", nullable: true)
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cars", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cars_Rentings_RentingId",
-                        column: x => x.RentingId,
-                        principalTable: "Rentings",
-                        principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Cars_RentingId",
-                table: "Cars",
-                column: "RentingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rentings_CustomerId",
