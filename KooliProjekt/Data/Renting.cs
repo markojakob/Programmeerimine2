@@ -16,14 +16,8 @@ namespace KooliProjekt.Data
 
         public Customer Customer { get; set; }
         public int CustomerId { get; set; }
-        public IList<Car> Lines { get; set; }
-
-        public Renting()
-        {
-            Lines = new List<Car>();
-        }
-
-      
+        public Car Car { get; set; }
+        public int CarId { get; set; }
 
     }
 }

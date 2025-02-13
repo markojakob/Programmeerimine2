@@ -1,4 +1,6 @@
-﻿using KooliProjekt.Data;
+﻿
+using KooliProjekt.Data;
+using KooliProjekt.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -6,50 +8,37 @@ namespace KooliProjekt.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public CustomerService(ApplicationDbContext context)
+        public CustomerService(IUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         public async Task<PagedResult<Customer>> List(int page, int pageSize)
         {
-            return await _context.Customers.GetPagedAsync(page, 5);
+            return await _uow.CustomerRepository.List(page, 5);
         }
 
         public async Task<IList<Customer>> Lookup()
         {
-            return await _context.Customers.OrderBy(c => c.LastName).ToListAsync();
+            return await _uow.CustomerRepository.Lookup();
         }
 
         public async Task<Customer> Get(int id)
         {
-            return await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+            return await _uow.CustomerRepository.Get(id);
         }
 
         public async Task Save(Customer list)
         {
-            if (list.Id == 0)
-            {
-                _context.Add(list);
-            }
-            else
-            {
-                _context.Update(list);
-            }
 
-            await _context.SaveChangesAsync();
+            await _uow.CustomerRepository.Save(list);
         }
 
         public async Task Delete(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-                await _context.SaveChangesAsync();
-            }
+            await _uow.CustomerRepository.Delete(id);
         }
     }
 }

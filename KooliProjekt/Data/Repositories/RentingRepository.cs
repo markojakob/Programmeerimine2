@@ -11,7 +11,8 @@ namespace KooliProjekt.Data.Repositories
         public override async Task<Renting> Get(int id)
         {
             return await DbContext.Rentings
-                .Include(list => list.Lines)
+                .Include(list => list.Car)                     
+                .Include(list => list.Customer)                
                 .Where(list => list.Id == id)
                 .FirstOrDefaultAsync();
         }
