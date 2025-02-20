@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks;
 using KooliProjekt.Data;
 using KooliProjekt.IntegrationTests.Helpers;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -21,6 +22,10 @@ namespace KooliProjekt.IntegrationTests
 
         public CarsControllerTests()
         {
+            var options = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            };
             _client = Factory.CreateClient();
             _context = (ApplicationDbContext)Factory.Services.GetService(typeof(ApplicationDbContext));
         }
@@ -36,6 +41,23 @@ namespace KooliProjekt.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
+        }
+        [Theory]
+        [InlineData("/Cars/Details")]
+        [InlineData("/Cars/Details/100")]
+        [InlineData("/Cars/Delete")]
+        [InlineData("/Cars/Delete/100")]
+        [InlineData("/Cars/Edit")]
+        [InlineData("/Cars/Edit/100")]
+        public async Task Should_return_notfound(string url)
+        {
+            // Arrange
+
+            // Act
+            using var response = await _client.GetAsync(url);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -63,7 +85,7 @@ namespace KooliProjekt.IntegrationTests
         }
 
         [Fact]
-        public async Task Details_should_return_ok_when_list_was_found()
+        public async Task Details_should_return_succcess_when_list_was_found()
         {
             // Arrange
             var list = new Car
@@ -84,6 +106,46 @@ namespace KooliProjekt.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
+        }
+        [Fact]
+        public async Task Create_should_save_new_list()
+        {
+            // Arrange
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Id", "0");
+            formValues.Add("Model", "Test");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            // Act
+            using var response = await _client.PostAsync("/Cars/Create", content);
+
+            // Assert
+            Assert.True(
+                response.StatusCode == HttpStatusCode.Redirect ||
+                response.StatusCode == HttpStatusCode.MovedPermanently);
+
+            var list = _context.Cars.FirstOrDefault();
+            Assert.NotNull(list);
+            Assert.NotEqual(0, list.Id);
+            Assert.Equal("Model", list.Model);
+        }
+
+        [Fact]
+        public async Task Create_should_not_save_invalid_new_list()
+        {
+            // Arrange
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Id", "");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            // Act
+            using var response = await _client.PostAsync("/Cars/Create", content);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.False(_context.Cars.Any());
         }
     }
 }

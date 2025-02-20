@@ -64,9 +64,9 @@ namespace KooliProjekt.IntegrationTests
         public async Task Details_should_return_ok_when_list_was_found()
         {
             // Arrange
+
             var car = new Car
             {
-                Id = 6,
                 Model = "Mustang",
                 CarMaker = "Ford",
                 Price = 25000,
@@ -75,15 +75,17 @@ namespace KooliProjekt.IntegrationTests
                 Category = "Coupe",
                 KmTariff = 20000
             };
-
+            _context.Cars.Add(car);
+            await _context.SaveChangesAsync();
             var customer = new Customer
             {
-                Id = 6, 
                 FirstName = "Liis",
                 LastName = "Lepik",
                 PhoneNum = 56892345,
                 Address = "Pärnu"
             };
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
             var list = new Renting
             {
                 RentalNo = 6,
