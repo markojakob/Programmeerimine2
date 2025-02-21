@@ -129,7 +129,7 @@ namespace KooliProjekt.Controllers
 
             return View(car);
         }
-
+            
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -138,6 +138,5 @@ namespace KooliProjekt.Controllers
             await _carService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

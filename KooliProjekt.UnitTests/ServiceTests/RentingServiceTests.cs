@@ -1,6 +1,8 @@
 ﻿using Castle.Core.Resource;
 using KooliProjekt.Data;
+using KooliProjekt.Search;
 using KooliProjekt.Services;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -156,6 +158,53 @@ namespace KooliProjekt.UnitTests.ServiceTests
 
         }
 
+        [Fact]
+        public async Task List_ShouldReturnCorrectRentals_WhenKeywordIsProvided()
+        {
+            // Arrange: Set up initial data
+            var rentals = new[]
+            {
+                new Renting { RentalNo = 11, RentalDate = DateTime.Now.AddDays(1), RentalDueTime = DateTime.Now.AddDays(2) },
+                new Renting { RentalNo = 12, RentalDate = DateTime.Now.AddDays(2), RentalDueTime = DateTime.Now.AddDays(3) }
+            };
 
+            await DbContext.Rentings.AddRangeAsync(rentals);
+            await DbContext.SaveChangesAsync();
+
+            var search = new RentingsSearch { Keyword = "11" };
+
+            // Act: Call the List method of your service (which you need to implement)
+            var rentingService = new RentingService(DbContext); // Replace with your actual service class
+            var result = await rentingService.List(1, 10, search);
+
+            // Assert: Check if the correct rental is returned
+            // Only one rental should match
+            Assert.Equal(1, result);  
+            Assert.Equal(123, result.rentals[0].RentalNo); // Ensure that the correct rental is returned
+        }
+
+        [Fact]
+        public async Task List_ShouldReturnEmpty_WhenNoRentalsMatchKeyword()
+        {
+            // Arrange: Set up initial data
+            var rentals = new[]
+            {
+                new Renting { RentalNo = 123, RentalDate = DateTime.Now.AddDays(1), RentalDueTime = DateTime.Now.AddDays(2) },
+                new Renting { RentalNo = 456, RentalDate = DateTime.Now.AddDays(2), RentalDueTime = DateTime.Now.AddDays(3) }
+            };
+
+            await DbContext.Rentings.AddRangeAsync(rentals);
+            await DbContext.SaveChangesAsync();
+
+            // Arrange: Create a RentingSearch object with Keyword = "789"
+            var search = new RentingsSearch { Keyword = "789" };
+
+            // Act: Call the List method
+            var rentingService = new RentingService(DbContext); // Replace with your actual service class
+            var result = await rentingService.List(1, 10, search);
+
+            // Assert: Ensure no results are returned
+            Assert.AreEqual(0, result.Items.Count); // No rental should match
+        }
     }
 }

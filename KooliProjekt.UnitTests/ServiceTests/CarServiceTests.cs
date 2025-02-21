@@ -123,8 +123,5 @@ namespace KooliProjekt.UnitTests.ServiceTests
             Assert.Equal(car.Id, result.Id);
 
         }
-
-
-
     }
 }

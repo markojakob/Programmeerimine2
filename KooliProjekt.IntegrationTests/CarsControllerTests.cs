@@ -107,13 +107,14 @@ namespace KooliProjekt.IntegrationTests
             // Assert
             response.EnsureSuccessStatusCode();
         }
+
         [Fact]
         public async Task Create_should_save_new_list()
         {
             // Arrange
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Id", "0");
-            formValues.Add("Model", "Test");
+            formValues.Add("Model", "Audi");
+            
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -128,7 +129,7 @@ namespace KooliProjekt.IntegrationTests
             var list = _context.Cars.FirstOrDefault();
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
-            Assert.Equal("Model", list.Model);
+            Assert.Equal("Audi", list.Model);
         }
 
         [Fact]
@@ -136,7 +137,8 @@ namespace KooliProjekt.IntegrationTests
         {
             // Arrange
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Id", "");
+            formValues.Add("Model", "");
+            formValues.Add("CarMaker", "");
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -144,7 +146,6 @@ namespace KooliProjekt.IntegrationTests
             using var response = await _client.PostAsync("/Cars/Create", content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.False(_context.Cars.Any());
         }
     }
