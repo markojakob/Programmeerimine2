@@ -161,7 +161,7 @@ namespace KooliProjekt.UnitTests.ServiceTests
         [Fact]
         public async Task List_ShouldReturnCorrectRentals_WhenKeywordIsProvided()
         {
-            // Arrange: Set up initial data
+            // Arrange
             var rentals = new[]
             {
                 new Renting { RentalNo = 11, RentalDate = DateTime.Now.AddDays(1), RentalDueTime = DateTime.Now.AddDays(2) },
@@ -173,14 +173,13 @@ namespace KooliProjekt.UnitTests.ServiceTests
 
             var search = new RentingsSearch { Keyword = "11" };
 
-            // Act: Call the List method of your service (which you need to implement)
-            var rentingService = new RentingService(DbContext); // Replace with your actual service class
+            // Act
+            var rentingService = new RentingService(DbContext); 
             var result = await rentingService.List(1, 10, search);
 
-            // Assert: Check if the correct rental is returned
-            // Only one rental should match
-            Assert.Equal(1, result);  
-            Assert.Equal(123, result.rentals[0].RentalNo); // Ensure that the correct rental is returned
+            // Assert: 
+            Assert.Equal(1, result.RowCount);  
+            Assert.Equal(123, result.Results[0].RentalNo);
         }
 
         [Fact]
@@ -204,7 +203,7 @@ namespace KooliProjekt.UnitTests.ServiceTests
             var result = await rentingService.List(1, 10, search);
 
             // Assert: Ensure no results are returned
-            Assert.AreEqual(0, result.Items.Count); // No rental should match
+            Assert.Equal(0, result.RowCount); // No rental should match
         }
     }
 }

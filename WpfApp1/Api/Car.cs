@@ -1,13 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace KooliProjekt.Data
+namespace WpfApp1.Api
 {
-    public class Car
+    class Car
     {
         public int Id { get; set; }
         [Required]
         [StringLength(30)]
-        public string Model  { get; set; }
+        public string Model { get; set; }
         [Required]
         public string CarMaker { get; set; }
 
@@ -20,6 +25,5 @@ namespace KooliProjekt.Data
         public decimal KmTariff { get; set; }
         [Required]
         public string Category { get; set; }
-
     }
 }

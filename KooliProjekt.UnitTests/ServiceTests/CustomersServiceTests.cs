@@ -110,8 +110,5 @@ namespace KooliProjekt.UnitTests.ServiceTests
             Assert.Equal(customer.Id, result.Id);
 
         }
-
-
-
     }
 }
