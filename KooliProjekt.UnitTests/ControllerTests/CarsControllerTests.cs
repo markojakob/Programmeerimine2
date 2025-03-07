@@ -22,7 +22,7 @@ namespace KooliProjekt.UnitTests.ControllerTests
             _carServiceMock = new Mock<ICarService>();
             _controller = new CarsController(_carServiceMock.Object);
         }
-        [Fact]
+        [Fact] 
         public async Task Index_should_return_correct_view_with_data()
         {
             // Arrange

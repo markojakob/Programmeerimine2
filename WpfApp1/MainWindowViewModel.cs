@@ -96,7 +96,7 @@ namespace WpfApp1
                 NotifyPropertyChanged();
             }
         }
-    }
+    }   
 
 }
 
