@@ -12,6 +12,7 @@ namespace WpfApp1
         public ICommand SaveCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
         public Predicate<Car> ConfirmDelete { get; set; }
+        public Action<string> OnError { get; set; }
 
         private readonly IApiClient _apiClient;
         public MainWindowViewModel() : this(new ApiClient())
@@ -31,6 +32,7 @@ namespace WpfApp1
                 {
                     SelectedItem = new Car();
                 }
+
             );
 
             SaveCommand = new RelayCommand<Car>(
@@ -64,6 +66,7 @@ namespace WpfApp1
                     Lists.Remove(SelectedItem);
                     SelectedItem = null;
                 },
+                
                 // CanExecute
                 list =>
                 {
@@ -77,7 +80,18 @@ namespace WpfApp1
             Lists.Clear();
 
             var lists = await _apiClient.List();
-            foreach (var list in lists)
+
+            if (lists.HasError)
+            {
+                if(OnError != null)
+                {
+                    OnError(lists.Error);
+                }
+
+                return;
+            }
+
+            foreach (var list in lists.Value)
             {
                 Lists.Add(list);
             }

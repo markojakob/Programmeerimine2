@@ -26,7 +26,7 @@ namespace KooliProjekt.IntegrationTests
             {
                 AllowAutoRedirect = false
             };
-            _client = Factory.CreateClient();
+            _client = Factory.CreateClient(options);
             _context = (ApplicationDbContext)Factory.Services.GetService(typeof(ApplicationDbContext));
         }
 
@@ -113,9 +113,12 @@ namespace KooliProjekt.IntegrationTests
         {
             // Arrange
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Model", "Audi");
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
             
-
             using var content = new FormUrlEncodedContent(formValues);
 
             // Act
@@ -129,7 +132,7 @@ namespace KooliProjekt.IntegrationTests
             var list = _context.Cars.FirstOrDefault();
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
-            Assert.Equal("Audi", list.Model);
+            Assert.Equal("A4", list.Model);
         }
 
         [Fact]

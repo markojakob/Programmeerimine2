@@ -37,5 +37,4 @@ namespace WpfApp1
             _execute((T)parameter);
         }
     }
-
 }

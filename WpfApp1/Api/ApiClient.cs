@@ -1,5 +1,4 @@
-﻿
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace WpfApp1.Api
@@ -15,11 +14,21 @@ namespace WpfApp1.Api
 
         }
 
-        public async Task<List<Car>> List()
+        public async Task<Result<List<Car>>> List()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<Car>>("Cars");
+            var result = new Result<List<Car>>();
+
+            try
+            {
+                result.Value = await _httpClient.GetFromJsonAsync<List<Car>>("Cars");
+            }
+            catch(Exception ex) 
+            {
+                result.Error =ex.Message;
+            }
 
             return result;
+            
         }
 
         public async Task Save(Car list)
