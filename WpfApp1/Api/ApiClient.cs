@@ -3,16 +3,17 @@ using System.Net.Http.Json;
 
 namespace WpfApp1.Api
 {
-    
+
     class ApiClient : IApiClient
     {
         private readonly HttpClient _httpClient;
-        public ApiClient() 
-        { 
+        public ApiClient()
+        {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7136/api/");
 
         }
+
 
         public async Task<Result<List<Car>>> List()
         {
@@ -22,30 +23,51 @@ namespace WpfApp1.Api
             {
                 result.Value = await _httpClient.GetFromJsonAsync<List<Car>>("Cars");
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                result.Error =ex.Message;
+                result.Error = ex.Message;
             }
 
             return result;
-            
+
         }
 
-        public async Task Save(Car list)
+        public async Task<Result> Save(Car list)
         {
-            if (list.Id == 0)
+            var result = new Result();
+
+            try
             {
-                await _httpClient.PostAsJsonAsync("Cars", list);
+                if (list.Id == 0)
+                {
+                   await _httpClient.PostAsJsonAsync("Cars", list);
+                }
+                else
+                {
+                   await _httpClient.PutAsJsonAsync("Cars/" + list.Id, list);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await _httpClient.PutAsJsonAsync("Cars/" + list.Id, list);
+                result.Error = ex.Message;
             }
+            return result;
         }
 
-        public async Task Delete(int id)
+        public async Task<Result> Delete(int id)
         {
-            await _httpClient.DeleteAsync("Cars/" + id);
+            var result = new Result();
+
+            try
+            {
+                await _httpClient.DeleteAsync("Cars/" + id);
+            }
+            catch(Exception ex)
+            {
+                result.Error = ex.Message;
+            }
+
+            return result;
         }
     }
 }

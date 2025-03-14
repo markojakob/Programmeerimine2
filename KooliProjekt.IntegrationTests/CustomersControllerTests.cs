@@ -1,5 +1,6 @@
 ﻿using KooliProjekt.Data;
 using KooliProjekt.IntegrationTests.Helpers;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,11 @@ namespace KooliProjekt.IntegrationTests
 
         public CustomersControllerTests()
         {
-            _client = Factory.CreateClient();
+            var options = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            };
+            _client = Factory.CreateClient(options);
             _context = (ApplicationDbContext)Factory.Services.GetService(typeof(ApplicationDbContext));
         }
 
@@ -40,7 +45,7 @@ namespace KooliProjekt.IntegrationTests
         {
             // Arrange 
 
-            // Act
+            // Act´
             using var response = await _client.GetAsync("/Customers/Details/178");
 
             // Assert
@@ -78,6 +83,49 @@ namespace KooliProjekt.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task Create_should_save_new_list()
+        {
+            // Arrange
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("FirstName", "Anna");
+            formValues.Add("LastName", "Kivi");
+            formValues.Add("PhoneNum", "432423");
+            formValues.Add("Address", "Tallinn");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            // Act
+            using var response = await _client.PostAsync("/Customers/Create", content);
+
+            // Assert
+            Assert.True(
+                response.StatusCode == HttpStatusCode.Redirect ||
+                response.StatusCode == HttpStatusCode.MovedPermanently);
+
+            var list = _context.Customers.FirstOrDefault();
+            Assert.NotNull(list);
+            Assert.NotEqual(0, list.Id);
+            Assert.Equal("Anna", list.FirstName);
+        }
+
+        [Fact]
+        public async Task Create_should_not_save_invalid_new_list()
+        {
+            // Arrange
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("FirstName", "");
+            formValues.Add("LastName", "");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            // Act
+            using var response = await _client.PostAsync("/Customers/Create", content);
+
+            // Assert
+            Assert.False(_context.Customers.Any());
         }
     }
 }

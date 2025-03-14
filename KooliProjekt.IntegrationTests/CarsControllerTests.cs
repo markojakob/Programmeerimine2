@@ -49,7 +49,7 @@ namespace KooliProjekt.IntegrationTests
         [InlineData("/Cars/Delete/100")]
         [InlineData("/Cars/Edit")]
         [InlineData("/Cars/Edit/100")]
-        public async Task Should_return_notfound(string url)
+        public async Task Get_Should_return_notfound(string url)
         {
             // Arrange
 
@@ -151,5 +151,6 @@ namespace KooliProjekt.IntegrationTests
             // Assert
             Assert.False(_context.Cars.Any());
         }
+
     }
 }

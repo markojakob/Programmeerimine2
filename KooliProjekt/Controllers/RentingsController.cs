@@ -18,6 +18,7 @@ namespace KooliProjekt.Controllers
 
         public RentingsController(IRentingService rentingService, ICustomerService customerService)
         {
+
             _rentingService = rentingService;
             _customerService = customerService;
         }

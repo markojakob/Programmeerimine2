@@ -162,10 +162,15 @@ namespace KooliProjekt.UnitTests.ServiceTests
         public async Task List_Should_Return_Correct_Rentals_When_Keyword_Is_Provided()
         {
             // Arrange
+            var customer1 = new Customer
+            {
+                FirstName = "Name",
+                LastName = "Last",
+                Address = "Tallinn"
+            };
             var rentals = new[]
             {
-                new Renting { RentalNo = 11, RentalDate = DateTime.Now.AddDays(1), RentalDueTime = DateTime.Now.AddDays(2) },
-                new Renting { RentalNo = 12, RentalDate = DateTime.Now.AddDays(2), RentalDueTime = DateTime.Now.AddDays(3) }
+                new Renting { RentalNo = 11, Customer = customer1, RentalDate = DateTime.Now.AddDays(1), RentalDueTime = DateTime.Now.AddDays(2) }
             };
 
             await DbContext.Rentings.AddRangeAsync(rentals);
@@ -179,11 +184,11 @@ namespace KooliProjekt.UnitTests.ServiceTests
 
             // Assert: 
             Assert.Equal(1, result.RowCount);  
-            Assert.Equal(123, result.Results[0].RentalNo);
+            Assert.Equal(11, result.Results[0].RentalNo);
         }
 
         [Fact]
-        public async Task List_ShouldReturnEmpty_WhenNoRentalsMatchKeyword()
+        public async Task List_should_return_empty_when_no_rentals_match_keyword()
         {
             // Arrange
             var rentals = new[]

@@ -3,7 +3,7 @@
     interface IApiClient
     {
         Task<Result<List<Car>>> List();
-        Task Save(Car list);
-        Task Delete(int id);
+        Task<Result> Save(Car list);
+        Task<Result> Delete(int id);
     }
 }
