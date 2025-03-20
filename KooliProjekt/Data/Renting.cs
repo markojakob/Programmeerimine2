@@ -5,7 +5,6 @@ namespace KooliProjekt.Data
     public class Renting
     {
         public int Id { get; set; }
-        
         [Required]
         public int RentalNo { get; set; }
         [Required] 
