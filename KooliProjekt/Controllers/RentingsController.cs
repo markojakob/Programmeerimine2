@@ -65,7 +65,7 @@ namespace KooliProjekt.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,RentalNo,RentalDate,RentalDueTime,DriveDistance,CustomerId")] Renting renting)
         {
             if (ModelState.IsValid)
@@ -100,14 +100,18 @@ namespace KooliProjekt.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,RentalNo,RentalDate,RentalDueTime,DriveDistance,CustomerId")] Renting renting)
         {
             if (id != renting.Id)
             {
                 return NotFound();
             }
-
+            var existingRenting = await _rentingService.Get(id);
+            if (existingRenting == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 await _rentingService.Save(renting);               
@@ -137,7 +141,7 @@ namespace KooliProjekt.Controllers
 
         // POST: Rentings/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _rentingService.Delete(id);

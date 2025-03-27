@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks;
 using KooliProjekt.Data;
 using KooliProjekt.IntegrationTests.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -152,5 +153,83 @@ namespace KooliProjekt.IntegrationTests
             Assert.False(_context.Cars.Any());
         }
 
+
+        [Fact]
+        public async Task DeleteConfirmed_should_delete_item()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Cars/Delete", content);
+
+            Assert.True(
+                response.StatusCode == HttpStatusCode.Redirect ||
+                response.StatusCode == HttpStatusCode.MovedPermanently);
+
+            Assert.Empty(await response.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
+        public async Task Edit_should_return_notfound_when_id_is_different()
+        {
+
+            var formValues = new Dictionary<string , string>();
+            
+            formValues.Add("Model", "A5");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Cars/Edit/999", content);
+
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Edit_should_not_edit_invalid_car()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Cars/Edit", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+
+
+            Assert.False(_context.Cars.Any());
+        }
+
+        [Fact]
+        public async Task Edit_should_return_null_when_car_is_null()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Id", "999");
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Cars/Edit/1  ", content);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        }
     }
 }

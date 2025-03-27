@@ -105,6 +105,11 @@ namespace KooliProjekt.Controllers
             {
                 return NotFound();
             }
+            var existingCar = await _carService.Get(id);
+            if (existingCar == null)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -133,7 +138,7 @@ namespace KooliProjekt.Controllers
             
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _carService.Delete(id);

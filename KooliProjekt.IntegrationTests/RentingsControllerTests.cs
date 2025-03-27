@@ -113,11 +113,6 @@ namespace KooliProjekt.IntegrationTests
         [Fact]
         public async Task Create_should_save_new_list()
         {
-            var customer1 = new Customer
-            {
-                FirstName = "Anna",
-
-            };
             // Arrange
             var formValues = new Dictionary<string, string>();
             formValues.Add("RentalNo", "123");
@@ -128,17 +123,17 @@ namespace KooliProjekt.IntegrationTests
             using var content = new FormUrlEncodedContent(formValues);
 
             // Act
-            using var response = await _client.PostAsync("/Customers/Create", content);
+            using var response = await _client.PostAsync("/Rentings/Create", content);
 
             // Assert
             Assert.True(
                 response.StatusCode == HttpStatusCode.Redirect ||
                 response.StatusCode == HttpStatusCode.MovedPermanently);
 
-            var list = _context.Customers.FirstOrDefault();
+            var list = _context.Rentings.FirstOrDefault();
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
-            Assert.Equal("Anna", list.FirstName);
+            Assert.Equal("RentalNo", list.RentalNo);
         }
 
         [Fact]
@@ -146,16 +141,94 @@ namespace KooliProjekt.IntegrationTests
         {
             // Arrange
             var formValues = new Dictionary<string, string>();
-            formValues.Add("FirstName", "");
-            formValues.Add("LastName", "");
+            formValues.Add("RentalNo", "123");
+            formValues.Add("RentalDate", "Kivi");
 
             using var content = new FormUrlEncodedContent(formValues);
 
             // Act
-            using var response = await _client.PostAsync("/Customers/Create", content);
+            using var response = await _client.PostAsync("/Rentings/Create", content);
 
             // Assert
             Assert.False(_context.Customers.Any());
+        }
+
+        [Fact]
+        public async Task DeleteConfirmed_should_delete_item()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Cars/Delete", content);
+
+            Assert.True(
+                response.StatusCode == HttpStatusCode.Redirect ||
+                response.StatusCode == HttpStatusCode.MovedPermanently);
+
+            Assert.Empty(await response.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
+        public async Task Edit_should_return_notfound_when_id_is_different()
+        {
+
+            var formValues = new Dictionary<string, string>();
+
+            formValues.Add("Model", "A5");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Cars/Edit/999", content);
+
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Edit_should_not_edit_invalid_renting()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Rentings/Edit", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+
+
+            Assert.False(_context.Cars.Any());
+        }
+
+        [Fact]
+        public async Task Edit_should_return_null_when_renting_is_null()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Id", "999");
+            formValues.Add("Model", "A4");
+            formValues.Add("CarMaker", "Audi");
+            formValues.Add("Category", "Sedan");
+            formValues.Add("KmTariff", "4000");
+            formValues.Add("Price", "43434");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Rentings/Edit/1  ", content);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
         }
     }
 }

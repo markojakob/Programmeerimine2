@@ -127,5 +127,80 @@ namespace KooliProjekt.IntegrationTests
             // Assert
             Assert.False(_context.Customers.Any());
         }
+
+        [Fact]
+        public async Task DeleteConfirmed_should_delete_item()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("FirstName", "Anna");
+            formValues.Add("LastName", "Kivi");
+            formValues.Add("PhoneNum", "432423");
+            formValues.Add("Address", "Tallinn");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Customers/Delete", content);
+
+            Assert.True(
+                response.StatusCode == HttpStatusCode.Redirect ||
+                response.StatusCode == HttpStatusCode.MovedPermanently);
+
+            Assert.Empty(await response.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
+        public async Task Edit_should_return_notfound_when_id_is_different()
+        {
+
+            var formValues = new Dictionary<string, string>();
+
+            formValues.Add("FirstName", "Anna");
+            formValues.Add("LastName", "Kivi");
+            formValues.Add("PhoneNum", "432423");
+            formValues.Add("Address", "Tallinn");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Customers/Edit/999", content);
+
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Edit_should_not_edit_invalid_customer()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("FirstName", "Anna");
+            formValues.Add("LastName", "Kivi");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Customers/Edit", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+
+
+            Assert.False(_context.Cars.Any());
+        }
+
+        [Fact]
+        public async Task Edit_should_return_null_when_customer_is_null()
+        {
+            var formValues = new Dictionary<string, string>();
+            formValues.Add("Id", "900");
+            formValues.Add("FirstName", "Anna");
+            formValues.Add("LastName", "Kivi");
+            formValues.Add("PhoneNum", "432423");
+            formValues.Add("Address", "Tallinn");
+
+            using var content = new FormUrlEncodedContent(formValues);
+
+            using var response = await _client.PostAsync("/Customers/Edit/1  ", content);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        }
+
     }
 }
