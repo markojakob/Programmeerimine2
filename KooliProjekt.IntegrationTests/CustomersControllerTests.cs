@@ -201,6 +201,5 @@ namespace KooliProjekt.IntegrationTests
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         }
-
     }
 }

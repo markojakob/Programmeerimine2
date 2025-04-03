@@ -18,6 +18,5 @@ namespace KooliProjekt.Data
         public int CustomerId { get; set; }
         public Car Car { get; set; }
         public int CarId { get; set; }
-
     }
 }

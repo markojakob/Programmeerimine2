@@ -133,7 +133,7 @@ namespace KooliProjekt.IntegrationTests
             var list = _context.Rentings.FirstOrDefault();
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
-            Assert.Equal("RentalNo", list.RentalNo);
+            Assert.Equal(123, list.RentalNo);
         }
 
         [Fact]
@@ -143,6 +143,9 @@ namespace KooliProjekt.IntegrationTests
             var formValues = new Dictionary<string, string>();
             formValues.Add("RentalNo", "123");
             formValues.Add("RentalDate", "Kivi");
+            formValues.Add("RentalDueTime", "432423");
+            formValues.Add("Address", "Tallinn");
+
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -157,15 +160,14 @@ namespace KooliProjekt.IntegrationTests
         public async Task DeleteConfirmed_should_delete_item()
         {
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Model", "A4");
-            formValues.Add("CarMaker", "Audi");
-            formValues.Add("Category", "Sedan");
-            formValues.Add("KmTariff", "4000");
-            formValues.Add("Price", "43434");
+            formValues.Add("RentalNo", "123");
+            formValues.Add("RentalDate", "Kivi");
+            formValues.Add("RentalDueTime", "432423");
+            formValues.Add("Address", "Tallinn");
 
             using var content = new FormUrlEncodedContent(formValues);
 
-            using var response = await _client.PostAsync("/Cars/Delete", content);
+            using var response = await _client.PostAsync("/Rentings/Delete", content);
 
             Assert.True(
                 response.StatusCode == HttpStatusCode.Redirect ||
@@ -180,15 +182,14 @@ namespace KooliProjekt.IntegrationTests
 
             var formValues = new Dictionary<string, string>();
 
-            formValues.Add("Model", "A5");
-            formValues.Add("CarMaker", "Audi");
-            formValues.Add("Category", "Sedan");
-            formValues.Add("KmTariff", "4000");
-            formValues.Add("Price", "43434");
+            formValues.Add("RentalNo", "123");
+            formValues.Add("RentalDate", "Kivi");
+            formValues.Add("RentalDueTime", "432423");
+            formValues.Add("Address", "Tallinn");
 
             using var content = new FormUrlEncodedContent(formValues);
 
-            using var response = await _client.PostAsync("/Cars/Edit/999", content);
+            using var response = await _client.PostAsync("/Rentings/Edit/999", content);
 
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -198,9 +199,10 @@ namespace KooliProjekt.IntegrationTests
         public async Task Edit_should_not_edit_invalid_renting()
         {
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Model", "A4");
-            formValues.Add("CarMaker", "Audi");
-            formValues.Add("Category", "Sedan");
+            formValues.Add("RentalNo", "123");
+            formValues.Add("RentalDate", "Kivi");
+            formValues.Add("RentalDueTime", "432423");
+            formValues.Add("Address", "Tallinn");
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -209,19 +211,17 @@ namespace KooliProjekt.IntegrationTests
             Assert.False(response.IsSuccessStatusCode);
 
 
-            Assert.False(_context.Cars.Any());
+            Assert.False(_context.Rentings.Any());
         }
 
         [Fact]
         public async Task Edit_should_return_null_when_renting_is_null()
         {
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Id", "999");
-            formValues.Add("Model", "A4");
-            formValues.Add("CarMaker", "Audi");
-            formValues.Add("Category", "Sedan");
-            formValues.Add("KmTariff", "4000");
-            formValues.Add("Price", "43434");
+            formValues.Add("RentalNo", "123");
+            formValues.Add("RentalDate", "Kivi");
+            formValues.Add("RentalDueTime", "432423");
+            formValues.Add("Address", "Tallinn");
 
             using var content = new FormUrlEncodedContent(formValues);
 
