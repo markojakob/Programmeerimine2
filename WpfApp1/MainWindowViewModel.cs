@@ -4,7 +4,7 @@ using WpfApp1.Api;
 
 namespace WpfApp1
 {
-    class MainWindowViewModel : NotifyPropertyChangedBase
+    public class MainWindowViewModel : NotifyPropertyChangedBase
     {
         public ObservableCollection<Car> Lists { get; private set; }
 

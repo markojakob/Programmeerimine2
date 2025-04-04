@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.Api
 {
-    class Car
+    public class Car
     {
         public int Id { get; set; }
         [Required]
