@@ -1,6 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using KooliProjekt.PublicApi;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
-using WpfApp1.Api;
+
 
 namespace WpfApp1
 {
@@ -111,6 +112,5 @@ namespace WpfApp1
             }
         }
     }   
-
 }
 

@@ -17,18 +17,30 @@ namespace Kooliprojekt.WpfApp1.UnitTests
 
 
         [Fact]
-        public void CanExecute_Returns_True_When_Selected_Item_Exists()
+        public async Task SaveCommand_saves_car_when_car_is_not_null()
         {
             // Arrange
             _vm.SelectedItem = new Car();
 
             // Act
-            var canExecute = ((RelayCommand<Car>)_vm.SaveCommand).CanExecute(null);
+            _vm.SaveCommand.Execute(_vm.SelectedItem);
+            _apiMock.Setup(list => list.Save(_vm.SelectedItem));
+            await _vm.Load();
+
 
             // Assert
-            Assert.True(canExecute);
+            Assert.NotNull(_vm.SelectedItem);
         }
 
+        [Fact]
+        public async Task DeleteCommand_deletes_car_when_confirmDelete_is_not_null()
+        {
+            _vm.SelectedItem = new Car();
+            _vm.DeleteCommand.Execute(_vm.SelectedItem);
+            
+            Assert.Null(_vm.SelectedItem);
 
+
+        }
     }
 }

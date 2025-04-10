@@ -1,0 +1,56 @@
+﻿@page "/weather"
+@inject HttpClient Http
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weathers</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (cars == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Model</th>
+                <th>CarMaker</th>
+                <th>Price</th>
+                <th>Colour</th>
+                <th>Description</th>
+                <th>KmTariff</th>
+                <th>Category</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in cars)
+            {
+                <tr>
+                    <td>@car.Id</td>
+                    <td>@car.Model</td>
+                    <td>@car.CarMaker</td>
+                    <td>@car.Price</td>
+                    <td>@car.Colour</td>
+                    <td>@car.Description</td>
+                    <td>@car.KmTariff</td>
+                    <td>@car.Category</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Car[]? cars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cars = await Http.GetFromJsonAsync<Car[]>("sample-data/weather.json");
+    }
+
+}

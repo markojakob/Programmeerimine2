@@ -22,6 +22,7 @@ namespace KooliProjekt
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddCors();
 
             var app = builder.Build();
 
@@ -39,7 +40,10 @@ namespace KooliProjekt
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseCors(
+                options => options.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
             app.UseRouting();
 
             app.UseAuthentication();

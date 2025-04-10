@@ -1,10 +1,14 @@
-﻿using System.Net.Http;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 
-namespace WpfApp1.Api
+namespace KooliProjekt.PublicApi
 {
 
-    class ApiClient : IApiClient
+    public class ApiClient : IApiClient
     {
         private readonly HttpClient _httpClient;
         public ApiClient()
