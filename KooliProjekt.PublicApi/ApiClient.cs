@@ -36,6 +36,22 @@ namespace KooliProjekt.PublicApi
 
         }
 
+        public async Task<Result<Car>> Get(int id)
+        {
+            var result = new Result<Car>();
+
+            try
+            {
+                result.Value = await _httpClient.GetFromJsonAsync<Car>("Cars");
+            }
+            catch (Exception ex)
+            {
+                result.Error = ex.Message;
+            }
+
+            return result;
+        }
+
         public async Task<Result> Save(Car list)
         {
             var result = new Result();
@@ -73,5 +89,7 @@ namespace KooliProjekt.PublicApi
 
             return result;
         }
+
+        
     }
 }

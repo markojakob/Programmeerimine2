@@ -1,5 +1,4 @@
 ﻿@page "/"
-@inject IApiClient apiClient
 
 <PageTitle>Cars</PageTitle>
 
@@ -13,6 +12,7 @@
 }
 else
 {
+    <p><a class="btn btn-primary" href="/create">Add new</a></p>
     <table class="table">
         <thead>
             <tr>
@@ -24,7 +24,7 @@ else
                 <th>Description</th>
                 <th>KmTariff</th>
                 <th>Category</th>
-
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -39,19 +39,12 @@ else
                     <td>@car.Description</td>
                     <td>@car.KmTariff</td>
                     <td>@car.Category</td>
-                </tr>
+                    <td>
+                        <a href="/edit/@car.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-primary" @onclick="() => Delete(car.Id)">Delete</button>
+                    </td>
+                </tr>            
             }
         </tbody>
     </table>
-}
-
-@code {
-    private List<Car> cars;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var result = await apiClient.List();
-        cars = result.Value;
-    }
-
 }

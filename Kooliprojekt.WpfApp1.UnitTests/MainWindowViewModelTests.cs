@@ -1,7 +1,7 @@
+using KooliProjekt.PublicApi;
 using Moq;
 using System.Security.Policy;
 using WpfApp1;
-using WpfApp1.Api;
 using Xunit;
 namespace Kooliprojekt.WpfApp1.UnitTests
 {
@@ -37,7 +37,10 @@ namespace Kooliprojekt.WpfApp1.UnitTests
         {
             _vm.SelectedItem = new Car();
             _vm.DeleteCommand.Execute(_vm.SelectedItem);
+           
+            _apiMock.Setup(list => list.Delete(_vm.SelectedItem.Id));
             
+
             Assert.Null(_vm.SelectedItem);
 
 

@@ -8,5 +8,7 @@ namespace KooliProjekt.PublicApi
         Task<Result<List<Car>>> List();
         Task<Result> Save(Car list);
         Task<Result> Delete(int id);
+
+        Task<Result<Car>> Get(int id);
     }
 }
