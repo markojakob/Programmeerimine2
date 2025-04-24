@@ -29,7 +29,7 @@ namespace KooliProjekt.PublicApi
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.AddError("_", ex.Message);
             }
 
             return result;
@@ -46,7 +46,7 @@ namespace KooliProjekt.PublicApi
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.AddError("_", ex.Message);
             }
 
             return result;
@@ -69,7 +69,7 @@ namespace KooliProjekt.PublicApi
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.AddError("_", ex.Message);
             }
             return result;
         }
@@ -84,7 +84,7 @@ namespace KooliProjekt.PublicApi
             }
             catch(Exception ex)
             {
-                result.Error = ex.Message;
+                result.AddError("_", ex.Message);
             }
 
             return result;
