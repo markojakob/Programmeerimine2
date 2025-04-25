@@ -1,0 +1,49 @@
+﻿@page "/rentals"
+@inherits KooliProjekt.BlazorApp.Pages.HomeRentings;
+
+<PageTitle>Rentals</PageTitle>
+
+<h1>Rentals</h1>
+
+<p>This component demonstrates fetching rental data from the server.</p>
+
+@if (rentals == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p><a class="btn btn-primary" href="/createRenting">Add new Rental</a></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>RentalNo</th>
+                <th>RentalDate</th>
+                <th>RentalDueTime</th>
+                <th>DriveDistance</th>
+                <th>Customer</th>
+                <th>Car</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var renting in rentals)
+            {
+                <tr>
+                    <td>@renting.RentalNo</td>
+                    <td>@renting.RentalDate</td>
+                    <td>@renting.RentalDueTime</td>
+                    <td>@renting.DriveDistance</td>
+                    <td>@renting.Customer</td>
+                    <td>@renting.Car</td>
+                    <td>
+                        <a href="/editRenting/@renting.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => Delete(renting.Id)">Delete</button>
+                    </td>
+                </tr>            
+            }
+        </tbody>
+    </table>
+}
+
