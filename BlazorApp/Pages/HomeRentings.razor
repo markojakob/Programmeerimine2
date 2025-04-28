@@ -1,19 +1,19 @@
-﻿@page "/rentals"
+﻿@page "/rentings"
 @inherits KooliProjekt.BlazorApp.Pages.HomeRentings;
 
-<PageTitle>Rentals</PageTitle>
+<PageTitle>Rentings</PageTitle>
 
-<h1>Rentals</h1>
+<h1>Rentings</h1>
 
 <p>This component demonstrates fetching rental data from the server.</p>
 
-@if (rentals == null)
+@if (rentings == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <p><a class="btn btn-primary" href="/createRenting">Add new Rental</a></p>
+    <p><a class="btn btn-primary" href="/createRenting">Add new Renting</a></p>
     <table class="table">
         <thead>
             <tr>
@@ -28,7 +28,7 @@ else
 
         </thead>
         <tbody>
-            @foreach (var renting in rentals)
+            @foreach (var renting in rentings)
             {
                 <tr>
                     <td>@renting.RentalNo</td>

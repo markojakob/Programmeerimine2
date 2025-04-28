@@ -14,7 +14,7 @@ namespace KooliProjekt.PublicApi
         public RentingApiClient()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7136/api/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7136/rentingapi/");
 
         }
 
