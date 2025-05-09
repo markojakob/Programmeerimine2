@@ -10,17 +10,31 @@ namespace KooliProjekt.BlazorApp.Pages
         protected IRentingApiClient rentingApiClient { get; set; }
 
         [Inject]
+        protected ICustomerApiClient customerApiClient { get; set; }
+
+        [Inject]
+        protected IApiClient carApiClient { get; set; }
+
+        [Inject]
         protected IJSRuntime RentingJsRuntime { get; set; }
 
         [Inject]
         protected NavigationManager RentingNavManager { get; set; }
 
         protected List<Renting> rentings { get; set; }
+        protected List<Car> cars { get; set; }
+        protected List<Customer> customers { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+
             var result = await rentingApiClient.List();
             rentings = result.Value;
+            var carResult = await carApiClient.List();
+            cars = carResult.Value;
+            var customerResult = await customerApiClient.List();
+            customers = customerResult.Value;
+
         }
 
         protected async Task Delete(int id)

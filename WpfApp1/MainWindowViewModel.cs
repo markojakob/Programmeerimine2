@@ -86,7 +86,7 @@ namespace WpfApp1
             {
                 if(OnError != null)
                 {
-                    OnError(lists.Error);
+                    OnError(lists.Errors.First().Value.First());
                 }
 
                 return;

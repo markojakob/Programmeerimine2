@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 namespace KooliProjekt.PublicApi
 {
 
-    public class RentingApiClient : IRentingApiClient
+    public class CustomerApiClient : ICustomerApiClient
     {
         private readonly HttpClient _httpClient;
-        public RentingApiClient()
+        public CustomerApiClient()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7136/api/rentings");
+            _httpClient.BaseAddress = new Uri("https://localhost:7136/api/customers");
 
         }
 
 
-        public async Task<Result<List<Renting>>> List()
+        public async Task<Result<List<Customer>>> List()
         {
-            var result = new Result<List<Renting>>();
+            var result = new Result<List<Customer>>();
 
             try
             {
-                result.Value = await _httpClient.GetFromJsonAsync<List<Renting>>("Rentings");
+                result.Value = await _httpClient.GetFromJsonAsync<List<Customer>>("Customers");
             }
             catch (Exception ex)
             {
@@ -35,13 +35,13 @@ namespace KooliProjekt.PublicApi
 
         }
 
-        public async Task<Result<Renting>> Get(int id)
+        public async Task<Result<Customer>> Get(int id)
         {
-            var result = new Result<Renting>();
+            var result = new Result<Customer>();
 
             try
             {
-                result.Value = await _httpClient.GetFromJsonAsync<Renting>("Rentings");
+                result.Value = await _httpClient.GetFromJsonAsync<Customer>("Customers");
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace KooliProjekt.PublicApi
             return result;
         }
 
-        public async Task<Result> Save(Renting list)
+        public async Task<Result> Save(Customer list)
         {
             var result = new Result();
 
@@ -59,11 +59,11 @@ namespace KooliProjekt.PublicApi
             {
                 if (list.Id == 0)
                 {
-                    await _httpClient.PostAsJsonAsync("Rentings", list);
+                    await _httpClient.PostAsJsonAsync("Customers", list);
                 }
                 else
                 {
-                    await _httpClient.PutAsJsonAsync("Rentings/" + list.Id, list);
+                    await _httpClient.PutAsJsonAsync("Customers/" + list.Id, list);
                 }
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace KooliProjekt.PublicApi
 
             try
             {
-                await _httpClient.DeleteAsync("Rentings/" + id);
+                await _httpClient.DeleteAsync("Customers/" + id);
             }
             catch (Exception ex)
             {
