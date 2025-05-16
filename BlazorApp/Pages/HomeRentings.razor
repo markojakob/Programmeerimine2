@@ -35,8 +35,8 @@ else
                     <td>@renting.RentalDate</td>
                     <td>@renting.RentalDueTime</td>
                     <td>@renting.DriveDistance</td>
-                    <td>@renting.Customer</td>
-                    <td>@renting.Car</td>
+                    <td>@GetCustomerName(renting.CustomerId)</td>
+                    <td>@GetCarDisplayName(renting.CarId)</td>
                     <td>
                         <a href="/editRenting/@renting.Id" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" @onclick="() => Delete(renting.Id)">Delete</button>

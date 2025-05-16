@@ -24,7 +24,7 @@ namespace KooliProjekt.PublicApi
 
             try
             {
-                result.Value = await _httpClient.GetFromJsonAsync<List<Renting>>("Rentings");
+                result.Value = await _httpClient.GetFromJsonAsync<List<Renting>>("rentings");
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace KooliProjekt.PublicApi
 
             try
             {
-                result.Value = await _httpClient.GetFromJsonAsync<Renting>("Rentings");
+                result.Value = await _httpClient.GetFromJsonAsync<Renting>($"rentings/{id}");
             }
             catch (Exception ex)
             {
@@ -59,11 +59,11 @@ namespace KooliProjekt.PublicApi
             {
                 if (list.Id == 0)
                 {
-                    await _httpClient.PostAsJsonAsync("Rentings", list);
+                    await _httpClient.PostAsJsonAsync("rentings", list);
                 }
                 else
                 {
-                    await _httpClient.PutAsJsonAsync("Rentings/" + list.Id, list);
+                    await _httpClient.PutAsJsonAsync("rentings/" + list.Id, list);
                 }
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace KooliProjekt.PublicApi
 
             try
             {
-                await _httpClient.DeleteAsync("Rentings/" + id);
+                await _httpClient.DeleteAsync("rentings/" + id);
             }
             catch (Exception ex)
             {
@@ -88,7 +88,5 @@ namespace KooliProjekt.PublicApi
 
             return result;
         }
-
-
     }
 }

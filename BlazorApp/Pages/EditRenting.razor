@@ -61,6 +61,7 @@
     private EditContext? editContext;
     private ValidationMessageStore? messageStore;
     private string title = "Edit";
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -90,14 +91,14 @@
         }
 
         var rentingResult = await rentingApiClient.Get(Id);
-        if (!rentingResult.HasError)
-        {
-            renting = rentingResult.Value;
-        }
-        else
+        if (rentingResult.HasError)
         {
             AddValidationErrors(rentingResult);
+            return;        
         }
+        renting = rentingResult.Value;
+
+        StateHasChanged();
     }
 
     private async Task FormSubmitted()

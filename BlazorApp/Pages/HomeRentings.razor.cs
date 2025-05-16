@@ -36,7 +36,16 @@ namespace KooliProjekt.BlazorApp.Pages
             customers = customerResult.Value;
 
         }
-
+        protected string GetCustomerName(int customerId)
+        {
+            var customer = customers.FirstOrDefault(c => c.Id == customerId);
+            return customer?.FullName ?? "Unknown Customer";
+        }
+        protected string GetCarDisplayName(int carId)
+        {
+            var car = cars.FirstOrDefault(c => c.Id == carId);
+            return car != null ? $"{car.CarMaker} {car.Model}" : "Unknown Car";
+        }
         protected async Task Delete(int id)
         {
             bool confirmed = await RentingJsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
