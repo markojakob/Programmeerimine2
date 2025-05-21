@@ -2,6 +2,7 @@
 using KooliProjekt.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore.Sqlite.Update.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace KooliProjekt.IntegrationTests
     [Collection("Sequential")]
     public class RentingsControllerTests : TestBase
     {
+        private readonly IServiceScope _scope;
         private readonly HttpClient _client;
         private readonly ApplicationDbContext _context;
 
@@ -125,7 +127,7 @@ namespace KooliProjekt.IntegrationTests
                 KmTariff = 20000
             };
             _context.Cars.Add(car);
-
+            await _context.SaveChangesAsync();
             var customer = new Customer
             {
                 FirstName = "Liis",
@@ -150,8 +152,8 @@ namespace KooliProjekt.IntegrationTests
             using var content = new FormUrlEncodedContent(formValues);
 
             // Act
+            //using var response = await _client.PostAsync("/Rentings/Create", content);
             using var response = await _client.PostAsync("/Rentings/Create", content);
-
             // Assert
             Assert.True(
                 response.StatusCode == HttpStatusCode.Redirect ||

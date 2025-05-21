@@ -66,7 +66,7 @@ namespace KooliProjekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RentalNo,RentalDate,RentalDueTime,DriveDistance,CustomerId")] Renting renting)
+        public async Task<IActionResult> Create([Bind("Id,RentalNo,RentalDate,RentalDueTime,DriveDistance,CarId, CustomerId")] Renting renting)
         {
             if (ModelState.IsValid)
             {
