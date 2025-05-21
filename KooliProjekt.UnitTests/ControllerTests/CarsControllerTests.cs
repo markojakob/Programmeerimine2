@@ -226,8 +226,11 @@ namespace KooliProjekt.UnitTests.ControllerTests
         {
             // Arrange
             var car = new Car { Id = 1 };
+            _carServiceMock.Setup(x => x.Get(car.Id)).ReturnsAsync(car);
+            _carServiceMock.Setup(x => x.Save(car)).Returns(Task.CompletedTask);
             // Act
             var result = await _controller.Edit(car.Id, car) as RedirectToActionResult;
+
             // Assert
             Assert.NotNull(result);
             Assert.Equal("Index", result.ActionName);
@@ -247,6 +250,9 @@ namespace KooliProjekt.UnitTests.ControllerTests
                 Category = "Sedan",
                 KmTariff = 15000
             };
+            _carServiceMock
+                .Setup(x => x.Get(id))
+                .ReturnsAsync(car);
             _controller.ModelState.AddModelError("key", "Error");
             // Act
             var result = await _controller.Edit(id, car) as ViewResult;

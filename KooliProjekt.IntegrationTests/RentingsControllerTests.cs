@@ -114,11 +114,38 @@ namespace KooliProjekt.IntegrationTests
         public async Task Create_should_save_new_list()
         {
             // Arrange
-            var formValues = new Dictionary<string, string>();
-            formValues.Add("RentalNo", "123");
-            formValues.Add("RentalDate", "Kivi");
-            formValues.Add("RentalDueTime", "432423");
-            formValues.Add("Address", "Tallinn");
+            var car = new Car
+            {
+                Model = "Mustang",
+                CarMaker = "Ford",
+                Price = 25000,
+                Colour = "Yellow",
+                Description = "Sporty muscle car",
+                Category = "Coupe",
+                KmTariff = 20000
+            };
+            _context.Cars.Add(car);
+
+            var customer = new Customer
+            {
+                FirstName = "Liis",
+                LastName = "Lepik",
+                PhoneNum = 56892345,
+                Address = "Pärnu"
+            };
+            _context.Customers.Add(customer);
+
+            await _context.SaveChangesAsync(); 
+
+            var formValues = new Dictionary<string, string>
+    {
+        { "RentalNo", "123" },
+        { "RentalDate", "2024-11-20" },
+        { "RentalDueTime", "2024-11-27" },
+        { "DriveDistance", "12345" },
+        { "CarId", car.Id.ToString() },
+        { "CustomerId", customer.Id.ToString() }
+    };
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -132,9 +159,12 @@ namespace KooliProjekt.IntegrationTests
 
             var list = _context.Rentings.FirstOrDefault();
             Assert.NotNull(list);
-            Assert.NotEqual(0, list.Id);
-            Assert.Equal(123, list.RentalNo);
+            Assert.Equal(car.Id, list.CarId);
+            Assert.Equal(customer.Id, list.CustomerId);
         }
+
+
+
 
         [Fact]
         public async Task Create_should_not_save_invalid_new_list()

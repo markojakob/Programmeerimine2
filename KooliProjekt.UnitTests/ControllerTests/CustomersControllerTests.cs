@@ -224,7 +224,6 @@ namespace KooliProjekt.UnitTests.ControllerTests
         public async Task Edit_should_return_RedirectToAction_when_Modelstate_is_valid()
         {
             // Arrange
-
             var customer = new Customer
             {
                 Id = 1,
@@ -233,6 +232,11 @@ namespace KooliProjekt.UnitTests.ControllerTests
                 PhoneNum = 51234567,
                 Address = "Narva"
             };
+            _customersServiceMock.Setup(x => x.Get(customer.Id))
+                .ReturnsAsync(customer);
+            _customersServiceMock.Setup(x => x.Save(customer)).Returns(Task.CompletedTask);
+
+
             // Act
             var result = await _controller.Edit(customer.Id, customer) as RedirectToActionResult;
             // Assert
@@ -252,6 +256,9 @@ namespace KooliProjekt.UnitTests.ControllerTests
                 Address = "Narva"
             };
             _controller.ModelState.AddModelError("key", "Error");
+            _customersServiceMock.Setup(x => x.Get(customer.Id))
+                .ReturnsAsync(customer);
+
             // Act
             var result = await _controller.Edit(id, customer) as ViewResult;
             // Assert

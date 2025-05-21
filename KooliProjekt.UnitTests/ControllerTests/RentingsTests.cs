@@ -291,28 +291,32 @@ namespace KooliProjekt.UnitTests.ControllerTests
         public async Task Edit_should_return_RedirectToAction_when_Modelstate_is_valid()
         {
             // Arrange
-            var customer1 = new Customer
-            {
-                Id = 1,
-                FirstName = "Mati",
-                LastName = "Maasikas",
-                PhoneNum = 57934854,
-                Address = "Pärnu"
-            };
             var renting = new Renting
             {
-                RentalNo = 1,
-                RentalDate = new DateTime(2024, 11, 25),
-                RentalDueTime = new DateTime(2024, 12, 25),
-                DriveDistance = 23000,
-                CustomerId = customer1.Id,
+                Id = 1,
+                RentalNo = 123,
+                RentalDate = DateTime.Today,
+                RentalDueTime = DateTime.Today.AddDays(7),
+                DriveDistance = 5000,
+                CustomerId = 1,
+                CarId = 2
             };
+
+            var existingRenting = new Renting();
+            _rentingServiceMock.Setup(x => x.Get(renting.Id))
+                               .ReturnsAsync(renting);
+
+            _rentingServiceMock.Setup(x => x.Save(It.IsAny<Renting>()))
+                               .Returns(Task.CompletedTask);
+
             // Act
             var result = await _controller.Edit(renting.Id, renting) as RedirectToActionResult;
+
             // Assert
             Assert.NotNull(result);
             Assert.Equal("Index", result.ActionName);
         }
+
         [Fact]
         public async Task Edit_should_return_view__when_model_state_is_not_valid()
         {
@@ -336,12 +340,15 @@ namespace KooliProjekt.UnitTests.ControllerTests
                 RentalDate = new DateTime(2024, 11, 25),
                 RentalDueTime = new DateTime(2024, 12, 25),
                 DriveDistance = 23000,
-                CustomerId = 2
+                CustomerId = 2,
+                CarId = 2
             };
             _controller.ModelState.AddModelError("key", "Error");
             _customerServiceMock
                 .Setup(x => x.Lookup())
                 .ReturnsAsync(customers);
+            _rentingServiceMock.Setup(x => x.Get(renting.Id))
+                               .ReturnsAsync(renting);
             // Act
             var result = await _controller.Edit(id, renting) as ViewResult;
             // Assert
